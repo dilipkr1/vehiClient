@@ -1,0 +1,230 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+:root {
+  --custom-color: orange;
+}
+
+.custom.active {
+  background-color: var(--custom-color);
+}
+
+.contact {
+  margin: 0 0px 200px;
+  background-color: #fff;
+  width: 100%;
+  font-family: "Poppins", sans-serif;
+  color: #393939;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.conatactNavbar {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 95px;
+  background-color: #fff;
+  padding: 0px 20px 5px 24px;
+}
+
+.contactLogo {
+  padding: 0px 0px;
+  margin: 5px 0;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.hrLine {
+  border-right: none;
+  border-left: none;
+  border-bottom: none;
+  height: 1px;
+  color: #393939;
+  font-weight: 100;
+  margin: 10px 0px;
+}
+
+.contactTitle {
+  text-align: center;
+  padding-top: 8px;
+  font-size: 24px;
+}
+.contactParagraph {
+  font-size: 14px;
+}
+
+.contactBox {
+  width: 37%;
+  padding: 0px 0px 10px 0px;
+  background-color: #fff;
+  box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset,
+    rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+}
+
+/* option */
+
+.chooseOption {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom {
+  width: 100%;
+   position: relative;
+  padding: 8px 0 8px 34px;
+  margin-bottom: 5px;
+  font-size: 16px;
+  font-weight: 520;
+  background-color: #f8f8f8;
+}
+.custom i {
+  padding-right: 10px;
+}
+ 
+.custom input {
+  appearance: none;
+}
+input {
+  box-sizing: border-box;
+  padding: 4px 0px;
+}
+/* .checkmark {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 24px;
+    width: 25px;
+    background-color: #eee;
+    border-radius: 50%;
+  } */
+/* .custom:hover input ~ .checkmark {
+    background-color: #ccc;
+  } */
+/* .custom input:checked ~ .checkmark {
+    background-color: #f18818;
+  } */
+
+/* .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  .custom input:checked ~ .checkmark:after {
+    display: block;
+  } */
+
+/* .custom .checkmark:after {
+    top: 7px;
+    left: 7px;
+    width: 11px;
+    height: 11px;
+    border-radius: 40%;
+    background: #fff;
+  } */
+/* //////////////////////// */
+
+.contactBtn {
+  margin: 20px 0px 20px 0px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.btn {
+  width: 46%;
+  margin: 10px;
+  border: none;
+
+  border-radius: 4px;
+  height: 40px;
+  background-color: #000;
+  font-size: 24px;
+}
+.btnLink {
+  background-color: #000;
+  text-decoration: none;
+  color: #f18818;
+}
+
+/* contactFooterSec */
+
+.contactFooterSec {
+  font-size: 14px;
+  padding-top: 15px;
+  text-decoration: none;
+  color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.link {
+  text-decoration: none;
+  color: #393939;
+}
+
+/* Mobile  */
+@media (min-width: 280px) and (max-width: 668px) {
+  body {
+    background-color: #fff;
+  }
+  .contactBox {
+    width: 100%;
+    height: 90vh;
+    margin: 0;
+  }
+
+  .contactTitleBox {
+    padding: 0px 0px;
+  }
+}
+
+@media (min-width: 280px) and (max-width: 668px) and (orientation: landscape) {
+  .contactBox {
+    /* padding-left: 20px; */
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@media (min-width: 414px) and (max-width: 930px) and (orientation: landscape) {
+  body {
+    background-color: #fff;
+  }
+  .contactBox {
+    width: 90%;
+    height: 90vh;
+  }
+  .contactTitleBox {
+    padding: 0px 20px;
+  }
+}
+
+/* ipad mini */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+  body {
+    background-color: #fff;
+  }
+  .contactBox {
+    width: 100%;
+    height: 70vh;
+  }
+}
+
+@media (min-width: 930px) and (max-width: 1024px) and (orientation: landscape) {
+  .contactBox {
+    width: 100%;
+    height: 80vh;
+  }
+  .contactTitleBox {
+    padding: 0px 20px;
+  }
+}

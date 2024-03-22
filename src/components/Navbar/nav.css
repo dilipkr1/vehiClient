@@ -1,0 +1,15 @@
+@media (min-width: 200px) and (max-width: 640px) {
+  .customNavResponsive {
+    display: none;
+  }
+
+  .faSize {
+    font-size: 20px;
+  }
+}
+
+@media (min-width: 700px) and (max-width: 1300px) {
+  .customNavResponsive2 {
+    display: none;
+  }
+}

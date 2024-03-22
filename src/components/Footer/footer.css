@@ -1,0 +1,14 @@
+
+
+p{
+    padding: 14px 0px;
+}
+
+
+
+@media (min-width: 200px) and (max-width: 640px){
+
+    .dontDisplayOnmob{
+        display: none;
+    }
+}
