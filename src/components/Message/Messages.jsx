@@ -4,14 +4,22 @@ import "./messages.css";
 import { useNavigate } from "react-router-dom";
 import vehicln from "../../images/vehiclean.png";
 import { CustomerContext } from "../../context/customrContext";
+import { Input } from "@mui/material";
 
- 
 export default function Messages({ userId }) {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [getmessage, setMessage] = useState("The car is in no parking.");
   const [selectedOption, setSelectedOption] = useState("sun");
   const { customerData } = useContext(CustomerContext);
+  const [enteredCar_No, setEnteredCar_No] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+  let baseUrl;
+  if (process.env.NODE_ENV === "development") {
+    baseUrl = process.env.REACT_APP_BACKEND_LOCALAPI;
+  } else {
+    baseUrl = process.env.REACT_APP_BACKEND_LIVEAPI;
+  }
 
   useEffect(() => {
     if (userId && customerData) {
@@ -19,7 +27,7 @@ export default function Messages({ userId }) {
     }
   }, [userId, customerData]);
 
-   if (!customerData) {
+  if (!customerData) {
     return <p>Loading..</p>;
   }
 
@@ -30,11 +38,18 @@ export default function Messages({ userId }) {
   if (foundCustomer) {
     const ownerPhoneNum = foundCustomer.customerPhone;
     localStorage.setItem("ownerPhoneNum", ownerPhoneNum);
+    localStorage.setItem("ownerName", foundCustomer.customerName);
+    localStorage.setItem("isAllowedPhone", foundCustomer.isAllowedPhone);
+    localStorage.setItem("isAllowedMsg", foundCustomer.isAllowedMsg);
+    localStorage.setItem("car_No", foundCustomer.car_No[0]);
   }
 
-  console.log(localStorage.getItem("ownerPhoneNum"));
-
+  const isSpamMsg = localStorage.getItem("isAllowedMsg");
+  const isSpamCall = localStorage.getItem("isAllowedPhone");
   const ownerPhoneNum = localStorage.getItem("ownerPhoneNum");
+  const ownerName = localStorage.getItem("ownerName");
+  const carNumber = localStorage.getItem("car_No");
+  console.log(isSpamMsg);
 
   let car_status = [
     "The lights of this car are on.",
@@ -50,28 +65,25 @@ export default function Messages({ userId }) {
     setMessage(index);
   };
 
+  // const myMessageFormat
+
   const sendMessage = async (e) => {
     e.preventDefault();
-    console.log(temperoryKey) 
-    console.log(ownerPhoneNum);
-    const headers = {
-      Authorization:
-        "MHQh1iNDzafynGpruWlcK5e9YA07ILBxRk6UmFTZEdXv8J2VtgLsgtfyr2aGXBEWp0UduhTNnlSz1FO8",
-    };
     try {
-      const response = await axios.post(
-        "https://www.fast2sms.com/dev/bulkV2",
-        {
-          route: "q",
-          message: { getmessage },
-          flash: 0,
-          numbers: { ownerPhoneNum },
-        },
-        { headers: headers }
-      );
+      console.log("not returned before");
+      const response = await axios.post(`${baseUrl}/msg/send-message`, {
+        message: `Hi ${ownerName}, a user reported 
+Your Vehicle Number #${carNumber} 
+${getmessage} 
+This message is generated from QR code on your vehicle
+Regards
+VehiSmart`,
+        numbers: ownerPhoneNum,
+      });
+
       if (response.status === 200) {
-        console.log("message sent successfully");
-        localStorage.removeItem("ownerPhoneNum");
+        localStorage.clear();
+        navigate("/message/success");
       }
     } catch (error) {
       localStorage.removeItem("ownerPhoneNum");
@@ -88,44 +100,35 @@ export default function Messages({ userId }) {
   };
 
   const temperoryKey = randNum();
+
   const handleCall = async () => {
-    console.log(temperoryKey)
-    const username = "7852010838";
-    const password = "admin";
     const key = temperoryKey;
     const number = ownerPhoneNum;
 
-    const auth = btoa(`${username}:${password}`);
-    const url = "https://telephonycloud.co.in/api/v1/mask";
     try {
-      const response = await fetch(url, {
+      const response = await fetch(`${baseUrl}/msg/send-call`, {
         method: "POST",
-        headers: {
-          Authorization: `Basic ${auth}`,
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
         body: new URLSearchParams({
           key: key,
           number: number,
-          " max-call-duration": 900,
+          "max-call-duration": 900,
         }),
       });
 
       if (!response.ok) {
         throw new Error("Failed to call API");
-        localStorage.removeItem("ownerPhoneNum");
+        localStorage.clear();
       }
       const data = await response.json();
-      navigate("/message/success");
-      console.log(data);
     } catch (error) {
-      localStorage.removeItem("ownerPhoneNum");
+      localStorage.clear();
       console.error("Error:", error);
     }
+    n;
   };
 
   return (
-    <div>
+    <div className="overflow-hidden overflow-y-hidden">
       <div className="conatactNavbar">
         <a href="/">
           <img className="contactLogo" src={vehicln} alt="logo_vehicCL" />
@@ -228,19 +231,51 @@ export default function Messages({ userId }) {
                 <span className="checkmark"></span>
               </label>
             </div>
-            <div className="contactBtn text-white">
-              <button type="submit" className="btn">
-                Message
-              </button>
-              <button className="btn text-white">
-                <a
-                  onClick={handleCall}
-                  href={`tel:01205136386,${temperoryKey}`}
-                >
-                  Call Now
-                </a>
-              </button>
+            <div className="p-3">
+              {carNumber !== enteredCar_No ? (
+                <p className="text-xs text-red tracking-wide">
+                  Please Enter Valid Car Number
+                </p>
+              ) : (
+                " "
+              )}
+              {carNumber !== enteredCar_No ? (
+                <input
+                  onChange={(e) => setEnteredCar_No(e.target.value)}
+                  type="text"
+                  maxLength={4}
+                  placeholder="Please Enter Last 4 digits of Car"
+                  className="border-logoClr border w-80 mx-auto p-4 p m-2 text-xs text-black font-normal tracking-wide
+            "
+                />
+              ) : (
+                " "
+              )}
             </div>
+            {carNumber === enteredCar_No && (
+              <div className="contactBtn text-white">
+                {isSpamMsg === "true" ? (
+                  <span className="cursor-pointer btn">Can't Message</span>
+                ) : (
+                  <button type="submit" className="btn">
+                    {/* {isSpamMsg ? "Sorry you can't Message" : "Message"} */}
+                    Message
+                  </button>
+                )}
+                <button className="btn text-white">
+                  {isSpamCall === "true" ? (
+                    <span className="cursor-pointer btn "> Can't Call</span>
+                  ) : (
+                    <a
+                      onClick={handleCall}
+                      href={`tel:01205136386,${temperoryKey}`}
+                    >
+                      Call Now
+                    </a>
+                  )}
+                </button>
+              </div>
+            )}
           </form>
 
           <hr className="hrLine" />
@@ -253,7 +288,7 @@ export default function Messages({ userId }) {
               </a>
               <a className="link" href="https://vehiclean.in/connect">
                 <span className="text-xs text-pgcolor tracking-tight font-extralight">
-                  Connect with VEHICONNECT
+                  Connect with VehiSmart
                 </span>
               </a>
             </p>

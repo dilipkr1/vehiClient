@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import "./footer.css";
 import { SocialMediaContext } from "../../context/settingSociaContext";
 import { SettingDataContext } from "../../context/settingDetContext";
+import hzLogo from "../../images/hz_vehiclean.png";
+import { Link } from "react-router-dom";
 export default function () {
   const [isLoading, setIsLoading] = useState(true);
   const { socialMediaData } = useContext(SocialMediaContext);
@@ -18,14 +20,18 @@ export default function () {
   const getSettingData = data.settingData[0];
   const socialMedia = data.socialMediaData;
   return (
-    <div className="dontDisplayOnmob py-10 bg-pricingcard text-pgcolor tracking-wide	font-roboto font-thin ">
-        <div className="leftFooter mt-20 flex justify-evenly text-pgcolor leading-4">
-        <div className="flex flex-col  gap-5">
+    <div className="dontDisplayOnmob py-10 px-2 flexMobCol bg-pricingcard font-normal text-pgcolor tracking-wide  ">
+      <div className="MobView leftFooter mt-10 flex   justify-evenly text-pgcolor leading-4">
+        <div className="flex justify-start flex-col items-start  gap-2">
+          <Link to="/">
+            <img src={hzLogo} alt="" />
+          </Link>
+
           <p className="">
-            Contact vehicle owner when in <br /> VehiClean Call vehicle owner
+            Contact vehicle owner when in <br /> VehiSmart Call vehicle owner
             with Privacy
           </p>
-           <i></i>
+          <i></i>
           <ul className="flex gap-8">
             <li>
               <a href={socialMedia?.facebook}>
@@ -55,20 +61,16 @@ export default function () {
           </ul>
           {/* </div> */}
         </div>
-        {/* <div className="lowerMiddle"> */}
         <div className="navItem flex flex-col">
-          <ul className="flex flex-col gap-4">
+          <ul className="flex MobViewRow flex-col   gap-4">
             <li>
-              <a href="/">About</a>
-            </li>
-            <li>
-              <a href="/news">Blog</a>
+              <a href="/about">About Us</a>
             </li>
             <li>
               <a href="/contact">Contact</a>
             </li>
             <li>
-              <a href="/">Business</a>
+              <a href="/shop">Shop</a>
             </li>
           </ul>
         </div>
@@ -77,7 +79,9 @@ export default function () {
           <a href={`mailto:${getSettingData?.email}`}>
             {getSettingData?.email}
           </a>
-          <p>+91{getSettingData?.phone}</p>
+          <a href="tel:+91{getSettingData?.phone}">
+            +91{getSettingData?.phone}
+          </a>
           <a
             className="tracking-wider"
             href="https://maps.app.goo.gl/qDJCPWuXXKk7mZ647"
@@ -87,17 +91,17 @@ export default function () {
         </div>
       </div>
       {/* </div> */}
-      <hr className="my-10" />
-      <div className="flex justify-between lg:px-20">
-        <div className="copyRight flex gap-4">
-          <button className="bg-white hover:bg-pricingcard text-main-700 font-semibold  py-2 px-4 border border-blue-50 hover:border-transparent rounded">
+      <hr className="mt-10" />
+      <div className="flex justify-between lg:px-20 MobView">
+        <div className="copyRight flex gap-4 mt-2">
+          <button className="bg-white hover:bg-pricingcard text-main-700 font-semibold   lg:py-2 lg:px-4 px-1 border border-blue-50 hover:border-transparent rounded">
             <a href={socialMedia?.android}>Download for Apple</a>
           </button>
-          <button className="bg-transparent hover:bg-white text-main-700 font-semibold  py-2 px-4 border border-blue-50 hover:border-transparent rounded">
+          <button className="bg-transparent hover:bg-white text-main-700 font-semibold lg:py-2 lg:px-4 px-1 border border-blue-50 hover:border-transparent rounded">
             <a href={socialMedia?.ios}>Download for Android</a>
           </button>
         </div>
-        <div className="text-pgcolor leading-4">
+        <div className="mt-2 text-xs text-pgcolor">
           <p>
             Copyright © 2024 {getSettingData?.businessName}. All rights
             reserved.

@@ -31,14 +31,15 @@ export const AuthProvider = ({ children }) => {
     }
     const fetchData = async () => {
       try {
+        dispatch({ type: 'SET_LOADING', payload: true });
         const bearerToken = localStorage.getItem("token");
         const headers = {
           Authorization: `Bearer ${bearerToken}`,
         };
-         const userDataResponse = await axios.get(
+        const userDataResponse = await axios.get(
           `${baseUrl}/auth/users`,
           { headers: headers }
-        ); 
+        );
         const userOrdersResponse = await axios.get(
           `${baseUrl}/orders/user-orders`,
           { headers: headers }
@@ -47,12 +48,12 @@ export const AuthProvider = ({ children }) => {
         dispatch({ type: "LOGIN_SUCCESS", payload: bearerToken });
         dispatch({ type: "SET_USER", payload: userDataResponse.data.customer });
         dispatch({ type: "SET_ORDERS", payload: userOrdersResponse.data });
-       } catch (error) {
+      } catch (error) {
         dispatch({ type: "SET_LOADING", payload: false });
         if (error.response && error.response.status === 500) {
           dispatch({ type: "SET_BACKEND_ERROR", payload: false });
         } else {
-          dispatch({ type: "SET_BACKEND_ERROR", payload: false});
+          dispatch({ type: "SET_BACKEND_ERROR", payload: false });
         }
       }
     };

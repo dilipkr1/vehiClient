@@ -1,0 +1,30 @@
+@media only screen and (max-width: 767px) {
+  .flexColMob {
+    display: flex;
+    flex-direction: col;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .textOnMOb {
+    margin: 0 20px;
+    text-align: center;
+    width: 100%;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .imgTrusted {
+    height: 300px;
+  }
+  .textwidthcxy {
+    margin: 0 auto;
+    text-align: center;
+    width: 65%;
+  }
+  .textwidthleft {
+    margin: 0 auto;
+    text-align: left;
+    width: 50%;
+  }
+}

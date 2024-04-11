@@ -18,10 +18,9 @@ const SettingDataProvider = ({ children }) => {
     } else {
       baseUrl = process.env.REACT_APP_BACKEND_LIVEAPI;
     }
-    
+
     const response = await fetch(`${baseUrl}/settings/businessDetails`);
     const data = await response.json();
-    console.log(data)
     return data;
   };
 

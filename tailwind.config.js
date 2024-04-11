@@ -70,7 +70,8 @@ module.exports = {
       'shopbgcolor':'#007bff',
       'bgnavclr':'#446bb9',
       'inputbgclr':'#f5f5f7',
-      'logoClr':'#f68712'
+      'logoClr':'#f68712',
+      'btnBgClr':"#6624D1"
  
     }
   },

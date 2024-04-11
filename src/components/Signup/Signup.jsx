@@ -20,19 +20,17 @@ function Signup() {
   const [errorMessageOtp, setErrorMessageOtp] = useState(null);
 
   let baseUrl;
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === "development") {
     baseUrl = process.env.REACT_APP_BACKEND_LOCALAPI;
   } else {
     baseUrl = process.env.REACT_APP_BACKEND_LIVEAPI;
   }
 
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    console.log(formData);
-  };
+   };
 
-   const handleSendOtp = async () => {
+  const handleSendOtp = async () => {
     if (formData.phone.length === 10) {
       setGetOtp(1);
     } else {
@@ -46,8 +44,7 @@ function Signup() {
         mobileNumber: formData.phone,
       });
 
-      console.log(response.data);
-      if (response.data.status === 200) {
+       if (response.data.status === 200) {
         setSent("Otp Sent");
       }
     } catch (error) {
@@ -61,7 +58,7 @@ function Signup() {
         setErrorMessageOtp("Failed to send OTP. Please try again.");
       }
     }
-  }; 
+  };
 
   const handleVerifyOtp = async () => {
     try {
@@ -107,20 +104,23 @@ function Signup() {
         );
       }
     } catch (error) {
-      console.log("error", errorMessage);
-    }
+     }
   };
 
   return (
     <div className="lg:flex justify-between mt-20  pt-10">
-      <div className="img w-full mx-5 pl-5">
-        <img className="rounded-xl w-full h-auto" src="https://cdn.leonardo.ai/users/e2c6caa2-d846-4b69-b9d3-e029a1ac4231/generations/fe23f836-6e28-4e06-bdf4-f973ac1949c2/Default_Imagine_a_sleek_modern_car_cleaning_facility_bathed_in_0.jpg" alt="" />
+      <div className="img w-full lg:mx-5 lg:pl-5">
+        <img
+          className="rounded-xl w-full h-auto"
+          src="https://cdn.leonardo.ai/users/e2c6caa2-d846-4b69-b9d3-e029a1ac4231/generations/fe23f836-6e28-4e06-bdf4-f973ac1949c2/Default_Imagine_a_sleek_modern_car_cleaning_facility_bathed_in_0.jpg"
+          alt=""
+        />
       </div>
       <div
-        style={{ width: "400px" }}
-        class="max-w-md lg:w-70 flex flex-col   mx-10 bg-white  rounded-lg overflow-hidden"
+        // style={{ width: "400px" }}
+        class="max-w-md lg:w-96 flex flex-col   mx-10 bg-white  rounded-lg overflow-hidden"
       >
-        <div class="text-2xl py-4 px-6 bg-gray-900 text-black text-center font-bold uppercase">
+        <div class="text-2xl py-4 px-6 bg-gray-900 text-black text-center font-bold ">
           Register
         </div>
         <form onSubmit={handleSubmit} class="py-4 px-4">
@@ -233,6 +233,15 @@ function Signup() {
             Create an account
           </button>
           {errorMessage && <p className="text-red">{errorMessage}</p>}
+          <p class="text-xs text-center mt-4">
+            Already have an account{" "}
+            <Link
+              className="text-xs font-bold underline hover:text-logoClr"
+              to="/login"
+            >
+              Sign In Here
+            </Link>
+          </p>
         </form>
       </div>
     </div>

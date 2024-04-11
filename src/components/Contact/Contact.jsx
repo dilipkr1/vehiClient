@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./contact.css";
+import axios from "axios";
 import { SettingDataContext } from "../../context/settingDetContext";
 import { SocialMediaContext } from "../../context/settingSociaContext";
 function Contact() {
@@ -7,7 +8,20 @@ function Contact() {
   const { socialMediaData } = useContext(SocialMediaContext);
   const [data, setData] = useState({ settingData: {}, socialMediaData: {} });
   const { settingData } = useContext(SettingDataContext);
+  const [sentMessage, setSentMessage] = useState(false);
+  const [formData, setFormData] = useState({
+    ctName: "YourName",
+    ctEmail: "example@gmail.com",
+    ctPhone: "Your Mobile Number",
+    ctMessage: "Your Message",
+  });
 
+  let baseUrl;
+  if (process.env.NODE_ENV === "development") {
+    baseUrl = process.env.REACT_APP_BACKEND_LOCALAPI;
+  } else {
+    baseUrl = process.env.REACT_APP_BACKEND_LIVEAPI;
+  }
   useEffect(() => {
     if (socialMediaData && settingData) {
       setData({ socialMediaData, settingData });
@@ -18,11 +32,40 @@ function Contact() {
   const getSettingData = data.settingData[0];
   const socialMedia = data.socialMediaData;
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+    console.log(formData)
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(baseUrl);
+    const url = `${baseUrl}/create-user-query`;
+    console.log(url);
+    try {
+      const response = await axios.post(url, {
+        ...formData,
+      });
+      if (response.status === 201) {
+        setSentMessage(true);
+        setTimeout(() => {
+          setSentMessage(false);
+        }, 5000);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="mt-20 mb-20 bg-pricingcard w-full  tracking-wide overflow-hidden">
       <div className="topSec bg-logoClr px-4">
         <div className="py-20 lg:mx-10 lg:px-20 headingShop text-white text-4xl font-roboto">
-          <h3 className=" text-3xl font-black   text-white tracking-wider">
+          <h3 className=" text-5xl font-black   text-white tracking-wider">
             Contact
           </h3>
         </div>
@@ -31,7 +74,7 @@ function Contact() {
       <div className="px-4 lg:flex lg:ml-20  lg:p-20">
         <div className="flex  flex-col">
           <div className="lg:mt-4 px-4 lg:px-0">
-            <h3 className="marginOnMob text-4xl font-black   text-main">
+            <h3 className="marginOnMob mt-3 text-4xl font-black   text-main">
               Get in touch
             </h3>
             <p>
@@ -52,24 +95,24 @@ function Contact() {
             <h5 className="font-medium text-main ">Phone (10 AM - 6 PM) </h5>
 
             <p className="text-pgcolor text-xl font-roboto leading-10">
-              <i class="fa-solid fa-phone pr-2"></i>WhatsApp Only{" "}
-              <a className="text-shopbgcolor" href={`tel:${getSettingData?.phone}`}>
-                +917300042153
-              </a>
+              {/* <i class="fa-solid fa-phone pr-2"></i>WhatsApp Only{" "} */}
               {/* <br /> Call :{" "}
               <a className="text-shopbgcolor" href={`tel:${getSettingData?.phone}`}>
                 +917300042153
               </a> */}
               <br />
               For Business Only :{" "}
-              <a className="text-shopbgcolor" href={`tel:${getSettingData?.phone}`}>
+              <a
+                className="text-shopbgcolor"
+                href={`tel:${getSettingData?.phone}`}
+              >
                 +91{getSettingData?.phone}
               </a>
             </p>
           </div>
-          <div className="support gap-3">
-            <h5 className="font-normal text-xl tracking-wider">Support</h5>
-            <span>
+          <div className="support">
+            <h5 className="font-normal text-xl mb-4 tracking-wider">Support</h5>
+            <span className="">
               <i class="fa-solid fa-envelope-circle-check"></i>{" "}
               {getSettingData?.email}
             </span>
@@ -81,23 +124,23 @@ function Contact() {
             <ul className="flex gap-8">
               <li>
                 <a href={socialMedia?.facebook}>
-                  <i className="fa-brands fa-facebook bg-bgnavclr rounded-full px-2 py-2"></i>
+                  <i className="fa-brands fa-facebook  rounded-full px-2 py-2"></i>
                 </a>
               </li>
               <li>
                 <a href={socialMedia?.instagram}>
-                  <i className="fa-brands fa-instagram bg-bgnavclr rounded-full px-2 py-2"></i>
+                  <i className="fa-brands fa-instagram rounded-full px-2 py-2"></i>
                 </a>
               </li>
               <li>
                 <a href={socialMedia?.twitter}>
-                  <i className="fa-brands fa-twitter bg-bgnavclr rounded-full px-2 py-2"></i>
+                  <i className="fa-brands fa-twitter  rounded-full px-2 py-2"></i>
                 </a>
               </li>
 
               <li>
                 <a href={socialMedia?.linkedin}>
-                  <i className="fa-brands fa-linkedin bg-bgnavclr rounded-full px-2 py-2"></i>
+                  <i className="fa-brands fa-linkedin  rounded-full px-2 py-2"></i>
                 </a>
               </li>
             </ul>
@@ -106,35 +149,48 @@ function Contact() {
 
         {/* below will be at ritht */}
 
-        <div className="flex flex-col letsConnect bg-white mt-5 lg:p-5 p-2 lg:ml-20 rounded lg:w-100">
+        <div className="flex shadow-2xl shadow-logoClr flex-col letsConnect bg-white mt-5 lg:p-8 p-2 lg:ml-20 rounded-2xl lg:w-100">
           <h5 className="text-4xl font-black   text-main">Lets Connect</h5>
           <p className="text-pgcolor tracking-wide">
             We respond to all quires, please be specific about your question.
           </p>
-          <form action="">
-            <div className="lg:flex lg:gap-6 lg:justify-start  lg:items-center">
+          <form onSubmit={handleSubmit} className="p-2" action="">
+            <div className="lg:flex lg:gap-6 lg:justify-start  lg:items-center  text-pgcolor">
               <div className="my-3">
                 <input
+                  name="ctName"
+                  onChange={handleChange}
                   className="py-3 bg-inputbgclr w-full outline-none outline-white pl-4 text-xl"
                   typecli="text"
+                  defaultValue={formData.ctName}
                   placeholder="Your Name"
                 />
               </div>
               <div>
                 <input
+                  onChange={handleChange}
+                  name="ctEmail"
                   className="py-3 bg-inputbgclr w-full outline-none outline-white pl-4 text-xl"
                   type="email"
                   placeholder="Your Email"
+                  defaultValue={formData.ctEmail}
                 />
               </div>
             </div>
             <div className="my-3">
               <div className="flex ">
-                <div className="code lg:w-20">india +91</div>
+                {/* <div className="code flex justify-center items-center lg:w-20">
+                  <span>+91</span>
+                </div> */}
                 <input
-                  className="py-3 bg-inputbgclr w-full outline-none outline-white pl-4 text-xl"
-                  type="number"
-                  placeholder="Phone"
+                  type="tel"
+                  onChange={handleChange}
+                  name="ctPhone"
+                  pattern="[0-9]{10}"
+                  maxLength="10"
+                  oninput="this.value = this.value.slice(0, 10)"
+                  className="py-3 pl-4  bg-inputbgclr w-full  outline-none outline-white  text-xl"
+                  placeholder="Enter Your 10 digit Mobile Number"
                 />
               </div>
             </div>
@@ -146,23 +202,28 @@ function Contact() {
                 Select an option
               </label>
               <select
+                onChange={handleChange}
+                name="ctQuest"
                 id="countries"
                 className="text-pgcolor py-3 bg-inputbgclr w-full outline-none outline-white pl-4 text-xl"
-                placeholder="General Question"
+                defaultValue={formData.ctQuest}
               >
-                <option selected>General Question</option>
-                <option value="US">Complain</option>
-                <option value="CA">Feedback</option>
-                <option value="FR">Job/Career</option>
-                <option value="DE">Legal</option>
-                <option value="DE">Investment</option>
+                <option value="General Question">General Question</option>
+                <option value="Complain">Complain</option>
+                <option value="Feedback">Feedback</option>
+                <option value="Job/Career">Job/Career</option>
+                <option value="Legal">Legal</option>
+                <option value="Investment">Investment</option>
               </select>
             </div>
             <div className="my-2">
               <input
+                name="ctMessage"
                 className="py-3 mb-4 bg-inputbgclr  outline-none outline-white pl-4 text-xl  w-full h-20 "
                 type="message"
+                maxLength={100}
                 placeholder="Your Message"
+                defaultValue={formData.ctMessage}
               />
             </div>
             <div className="gap-4">
@@ -171,12 +232,15 @@ function Contact() {
             "
                 htmlFor="Term and Condition"
               >
-                <input className="font-medium py-3 text-xl" type="checkbox" />
-                <span className="">
-                  {" "}
+                <input
+                  required
+                  className="font-medium py-3 text-xl"
+                  type="checkbox"
+                />
+                <span className="pl-1">
                   I agree to the
                   <a
-                    className=" text-color1 tracking-wider font-semibold"
+                    className="pl-1 text-color1 text-xs tracking-wider font-semibold"
                     href="https://vehiclean.in/index.php/terms-conditions/"
                   >
                     Terms & Conditioins
@@ -188,38 +252,25 @@ function Contact() {
             "
               >
                 <br />
-                We will not spam or bother you, we may contact you for any
-                further questions.
+                {/* We will not spam or bother you, we may contact you for any
+                further questions. */}
               </small>
             </div>
             <div className="my-4">
+              {sentMessage && (
+                <p style={{ color: "green" }} className="bg-white">
+                  Successfully Sent,
+                  <br /> Our team will connect with you
+                </p>
+              )}
               <input
-                className="bg-black text-white w-full py-2 font-roboto tracking-wide"
+                className="bg-black hover:bg-logoClr rounded-2xl cursor-pointer p-2 text-white w-full py-2 font-roboto tracking-wide"
                 value={"send message"}
                 type="submit"
               />
             </div>
-            <div className="text-pgcolor  font-roboto ">
-              <span>Get instant response on WhatsApp, Write us here.</span>
-              <a href={`tel:${getSettingData?.phone}`}>
-                <button>
-                  <i class="fa-solid fa-phone pr-2"></i> WhatsApp us.
-                </button>
-              </a>
-            </div>
           </form>
         </div>
-      </div>
-
-      <div className="map lg:ml-20 bg-pricingcard">
-        <iframe
-          title="rendering map "
-          className="hover: scale-150 duration-150 "
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5162.713463886026!2d75.73438600415845!3d26.854709420798688!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396db56937ee5f93%3A0xd828666dcdcb6069!2sVehiclean%20smart%20solutions%20pvt!5e0!3m2!1sen!2sin!4v1706969780286!5m2!1sen!2sin"
-          allowfullscreen=""
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-        ></iframe>
       </div>
     </div>
   );

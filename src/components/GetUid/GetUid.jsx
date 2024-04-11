@@ -2,15 +2,15 @@ import { useContext, useEffect, useState } from "react";
 import { OrderContext } from "../../context/OrderContext";
 import { useNavigate, useParams } from "react-router-dom";
 import Messages from "../Message/Messages";
-
 export default function GetUid() {
   const navigate = useNavigate();
   const { uid } = useParams();
-
+  const [text, setText] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const { orderData } = useContext(OrderContext);
   const [userId, setUserId] = useState(null);
 
+ 
   useEffect(() => {
     setIsLoading(false);
   }, [orderData]);
@@ -30,6 +30,7 @@ export default function GetUid() {
       const userId = getUserId ? getUserId.userId : null;
       setUserId(userId);
     }
+    setText("Sorry Not Activated!! Or Invalid UID");
   }, [orderData, uid]);
 
   useEffect(() => {
@@ -41,11 +42,10 @@ export default function GetUid() {
   if (isLoading) {
     return <p>Loading ...</p>;
   }
-
-  if (!userId) {
+  if (userId === null) {
     return (
       <div className="mt-20 pt-10 mx-auto flex justify-center items-center text-pgcolor">
-        <p>Sorry Not Activated!! Or Invalid UID</p>
+        <p>{text}</p>
       </div>
     );
   }

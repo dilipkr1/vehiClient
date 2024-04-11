@@ -3,8 +3,6 @@ import React, { useEffect, useState } from "react";
 export default function News() {
   const [news, setNews] = useState([]);
 
-   
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -22,6 +20,7 @@ export default function News() {
         }
 
         const data = await response.json();
+        console.log(response, data);
         setNews(data.articles);
       } catch (error) {
         console.error("Error:", error);

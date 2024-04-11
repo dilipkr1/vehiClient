@@ -1,8 +1,8 @@
 import Bestsellingpro from "./components/Bestproduct/Bestsellingpro";
 import Home from "./components/Home/Home";
-import Workdetails from "./components/Howworks/Workdetails";
+import Workdetails from "./components/Howworks/Useoftag";
 import News from "./components/News/News";
-import Parking from "./components/Parkingtags/ParkingTag";
+import VehiFeatures from './components/Fetures/VehiFeatures'
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Shop from "./components/Shop/Shop";
 import Layout from "./components/Layout/Layout";
@@ -18,9 +18,17 @@ import Messages from "./components/Message/Messages";
 import CusOrders from "./components/Custorder/CusOrders";
 import CusProfile from "./components/Custopro/CusProfile";
 import GetUid from "./components/GetUid/GetUid";
-
+import ParkingTag from "./components/Parkingtag/ParkingTag";
+import Ourservices from "./components/Services/Ourservices";
+import Homeshop from "./components/Homeshop/Homeshop";
+import Reviews from "./components/Reviews/Reviews";
+import About from "./components/About/About";
+import Points from "./components/Points/Points";
+import Trusted from "./components/Trusted/Trusted";
+import Razpay from './components/Razorpay/Razpay'
 
 function App() {
+  
   return (
 
     <div className="App" >
@@ -32,10 +40,17 @@ function App() {
               index
               element={
                 <>
+
                   <Home />
                   <Workdetails />
-                  <Parking />
+                  <VehiFeatures />
+                  {/* <ParkingTag /> */}
+                  <Ourservices />
+                  {/* <Homeshop /> */}
                   <Bestsellingpro />
+                  <Reviews />
+                  <Points />
+                  <Trusted />
                 </>
               }
             />
@@ -66,7 +81,11 @@ function App() {
             </Route>
 
             <Route path="contact" element={<Contact />} />
-            <Route path="news" element={<News />} />
+            {/* <Route path="news" element={<News />} /> */}
+            <Route path="about" element={<About />} />
+            {/* <Route path="pay" element={<Razpay />} /> */}
+
+
             <Route path="*" element={<Nopage />} />
 
           </Route>

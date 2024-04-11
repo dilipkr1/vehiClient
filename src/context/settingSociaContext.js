@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { createContext } from 'react';
-
+import { createContext } from 'react'; 
 const SocialMediaContext = createContext();
 
 const SocialMediaProvider = ({ children }) => {

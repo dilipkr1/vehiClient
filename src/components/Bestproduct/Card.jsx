@@ -1,43 +1,59 @@
 import React, { useContext } from "react";
 import { PackageContext } from "../../context/packageContext";
+import packageImg from "../../images/services3.png";
+import "./bestselling.css";
+import { Link } from "react-router-dom";
 
-export default function (props) {
+export default function () {
   const { packageData } = useContext(PackageContext);
 
   if (!packageData || packageData.length === 0) {
-    return <p>Loading...</p>;
+    return null;
   }
-  const product1 = packageData[0];
 
   return (
-    <div className=" lg:flex-row   p-10 rounded-l w-full grid  grid-cols-2 customMobflexCol    justify-center items-center lg:gap-0 gap-7 lg:gap-0">
-      <div className=" p-5 pricingCard flex  flex-col justify-end item">
-        <span className="text-2xl">{product1.packageName}</span>
-        <span className="text-2xl">{product1.packageTitle}</span>
-        <span className="text-xl">{product1.packageDescription}</span>
-        {/* <span className="text-xl">{product1.packageDiscount}</span> */}
-        <a href="/shop">
-          <button className="bg-logoClr rounded-md px-5 py-3 text-white font-bold tracking-wide">
-            Shop
-          </button>
-        </a>
-      </div>
-      <div className=" p-5 pricingBody flex flex-col justify-end  font-roboto font-thin   text-pgcolor tracking-wide leading-6">
-        <picture
-          style={{
-            marginTop: "0px",
-          }}
-          className="lg:w-50 lg:h-90 lg:pt-10 rounded-lg"
-        >
-          <source
-            width="90%"
-            media="(min-width: 200px)"
-            srcset={product1.packageImg}
-          />
-          <source media="(max-width: 1300px)" srcset={product1.packageImg} />
-          <img loading="lazy" src={product1.packageImg} alt="packages_images" />
-        </picture>
-      </div>
+    <div className="">
+      {packageData.map((mypckg) => (
+        <div className="flex justify-center items-center">
+          <Link
+            className="lg:flex lg:justify-start justify-center items-center lg:items-start"
+            to="/shop"
+          >
+            <div className="flex justify-center items-center">
+              <img
+                className="rounded-xl mb-5 productSizeHome"
+                // style={{ height: "180px", width: "290px" }}
+                component="img"
+                src={mypckg.packageImg}
+                alt="Package Image"
+              />
+            </div>
+
+            <div>
+              <div style={{ height: "20px" }} className="flex flex-col">
+                <span className="text-2xl">{mypckg.packageTitle}</span>
+                <span className="text-pgcolor text-xl tracking-wide">
+                  {mypckg.packageDescription}
+                </span>
+              </div>
+              <div className="lg:flex  justify-center items-center px-10">
+                <span className="text-xl textwidthOnMob w-64">
+                  {mypckg.packageName}
+                </span>
+
+                <Link
+                  className="align-middle mt-2 flex justify-center items-center"
+                  to="/shop"
+                >
+                  <button type="button" class="signup-Btn">
+                    Shop Now
+                  </button>
+                </Link>
+              </div>{" "}
+            </div>
+          </Link>
+        </div>
+      ))}
     </div>
   );
 }

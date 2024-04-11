@@ -3,13 +3,42 @@
     display: none;
   }
 
-  .faSize {
-    font-size: 20px;
+  .authDesk {
+    display: none;
   }
+
+  .faSize {
+    font-size: 30px;
+    font-weight: 600;
+  }
+}
+
+.signup-Btn {
+  color: white;
+  height: 42px;
+  line-height: 42px;
+  padding: 0 24px;
+  font-weight: 600;
+  font-size: 15px;
+  text-align: center;
+  letter-spacing: -0.02em;
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  z-index: 1;
+  transition: 0.5s;
+  background: linear-gradient(180deg, #f68712 -23%, #f68121);
+  box-shadow: 0 2px 3px rgba(3, 22, 3, 0.2);
+  border-radius: 10px;
 }
 
 @media (min-width: 700px) and (max-width: 1300px) {
   .customNavResponsive2 {
     display: none;
   }
+  .authDesk {
+    display: block;
+  }
+
+ 
 }

@@ -28,30 +28,11 @@ export default function CusOrders() {
   }
 
   return (
-    <div className="my-20 pt-20   gap-1  flex flex-col">
-      <div className="flex  justify-center items-center gap-5 p-3 font-bold  text-xl  bg-logoClr ">
-        <div>
-          <Link to="/profile">
-            {" "}
-            <button className="underline tracking-wide text-xl fotn-bold font-sans px-3 text-white">
-              Profile
-            </button>
-          </Link>
-        </div>
-        <div>
-          <Link to="/profile/orders">
-            {" "}
-            <button className="underline tracking-wide text-xl fotn-bold font-sans px-3 text-white">
-              Orders
-            </button>
-          </Link>
-        </div>
-      </div>
-      <div className="mt-5 mx-20    px-20 flex flex-col justify-center gap-4 items-center">
+    <div className="">
+      <div className="lg:mx-20 lg:px-20 flex flex-col justify-center lg:items-start ">
         <div className="flex justify-center items-center">
           <span className="text-xl  ">Your Orders</span>
-          <i class="fa-solid  fa-2x  fa-cart-shopping"> </i>
-        </div>
+         </div>
         <div className="flex flex-col lg:grid-col-3 justify-start gap-2 border-1 to-black">
           {Orders.map((order, index) => (
             <div className="flex gap-5" key={order._id}>

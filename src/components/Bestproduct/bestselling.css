@@ -1,5 +1,25 @@
+.customIconColor {
+  color: #31c369;
+  padding-right: 7px;
+}
+@media only screen and (min-width: 767px) {
+  .productSizeHome {
+    width: 40vw;
+  }
+}
 
-.customIconColor{
-    color: #31c369;
-    padding-right: 7px;
+.imgResponsive {
+  background-size: cover;
+  height: 350px;
+}
+
+@media only screen and (max-width: 767px) {
+  .docenter {
+    margin: 0 auto;
+    text-align: center;
+    width: 100%;
+  }
+  .productSizeHome {
+    width: 300px;
+  }
 }

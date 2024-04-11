@@ -1,17 +1,34 @@
 @media (min-width: 200px) and (max-width: 640px) {
+  .onDesktopOnly {
+    display: none;
+  }
   .mobFlexCol {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .headMob {
+    padding-left: 50px;
   }
 
   .mtforMob {
-    position: absolute;
-    margin-top: 0;
+    display: none;
+    /* position: absolute;
+    disp
+    margin-top: 0; */
   }
 }
 
 @media only screen and (min-width: 1024px) {
   #deskview {
     margin-top: 330px;
+    width: 35vw;
+  }
+  .desktopwidth {
+    width: 60vw;
+  }
+  .onDesktopOnly {
+    display: block;
   }
 }

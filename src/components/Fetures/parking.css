@@ -1,0 +1,61 @@
+.giveSpace {
+  letter-spacing: 0px;
+}
+
+.cxy {
+  width: 60%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 0 5px;
+  width: 60%;
+}
+.fetureImg {
+  height: auto;
+  width: 80%;
+  background-size: contain;
+  overflow-x: hidden;
+  border-radius: 20px;
+}
+@media (min-width: 200px) and (max-width: 640px) {
+  .customMobflexCol {
+    display: flex;
+    flex-direction: column;
+  }
+  .flexColMob {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+  }
+  .mobImg {
+    width: 100%;
+    height: 800px;
+    background-size: cover;
+  }
+  .textwidthVf {
+    margin: 2px 0px;
+    text-align: center;
+    width: 100%;
+  }
+
+  .textwidthServices {
+    margin: 2px 0;
+    text-align: center;
+    width: 100%;
+  }
+
+  .textWithServ {
+    margin: 2px 0 0 18px;
+  }
+}
+
+/* custom-alignLeft */
+
+@media (min-width: 1024px) {
+  .textwidthcxyServices {
+    margin: 0 auto;
+    text-align: center;
+    width: 65%;
+  }
+}
