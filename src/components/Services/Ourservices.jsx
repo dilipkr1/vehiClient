@@ -35,13 +35,13 @@ function Ourservices() {
               <span className="textwidthOnMob ">
                 Your contact details will not be shared, but anyone who has any
                 issue with your parked vehicle can contact you. We will send you
-                WhatsApp, SMS and Masked call..
+                 SMS and Masked call..
               </span>
               <div className="title my-2 ">
                 <div className="lists flex flex-col">
                   <span>
                     <i className="fa-solid bg-logoClr p-2 rounded-full m-1  fa-check"></i>
-                    Masked Calls + WhatsApp.
+                    Masked Calls .
                   </span>
                   <span>
                     <i className="fa-solid bg-logoClr p-2 rounded-full m-1  fa-check"></i>
@@ -51,18 +51,15 @@ function Ourservices() {
                     <i className="fa-solid bg-logoClr p-2 rounded-full m-1  fa-check"></i>
                     One-time Buy.
                   </span>
-                  <span>
-                    <i className="fa-solid bg-logoClr p-2 rounded-full m-1  fa-check"></i>
-                    Vehicle IN and Out Logs.
-                  </span>
-                  <span>
+
+                  {/* <span>
                     <i className="fa-solid bg-logoClr p-2 rounded-full m-1  fa-check"></i>
                     Fast Tag Recharge.
                   </span>
                   <span>
                     <i className="fa-solid bg-logoClr p-2 rounded-full m-1  fa-check"></i>
                     Insurance and PUC reminders.
-                  </span>
+                  </span> */}
                 </div>
               </div>
             </div>

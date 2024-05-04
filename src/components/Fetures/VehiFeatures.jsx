@@ -16,9 +16,8 @@ function vehFeatures() {
             </h3>
             <div className="title my-2">
               <h1 className="text-pgcolor textwidthVf textwidthLeft lg:text-4xl text-3xl font-bold tracking-wide ">
-                Privacy and Security at its Best VehiSmart
-                <br />
-                Parking Tag.
+                Privacy and Security at its Best VehiConnect&nbsp;Parking Tag.
+                {/* <br /> */}
               </h1>
 
               <div className="points flex flex-col mt-8 flexColMob">
@@ -44,11 +43,11 @@ function vehFeatures() {
                         style={{ color: "#222222" }}
                         className="font-bold text-xl"
                       >
-                        2.WhatsApp Update
+                        2. Call Masking
                       </span>
                       <p className="w-15">
-                        Receive Updates on your WhatsApp, <br />
-                        SMS and Also Masked Calls.
+                        Shield your identity while making calls. <br />
+                        your number remains hidden.
                       </p>
                     </ol>
                   </div>
@@ -82,8 +81,8 @@ function vehFeatures() {
                       </span>
 
                       <p className="">
-                        Add yourYour contact details are not <br />
-                        shared when someone contacts you..
+                        Add your emergency contacts to <br />
+                        contact.
                       </p>
                     </ol>
                   </div>

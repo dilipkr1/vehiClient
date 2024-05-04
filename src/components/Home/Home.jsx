@@ -4,7 +4,7 @@ import heroImg from "../../images/hero.png";
 import fallback from "../../images/hero.png";
 import { SocialMediaContext } from "../../context/settingSociaContext";
 import { SettingDataContext } from "../../context/settingDetContext";
-import BackgroundContainer from "../Homeshop/Homeshop";
+ 
 import { Link } from "react-router-dom";
 
 export default function Home() {
@@ -22,7 +22,7 @@ export default function Home() {
   const socialMedia = data.socialMediaData;
 
   return (
-    <div className="font-roboto lg:justify-start grid grid-cols-3 lg:px-12 lg:flex-row justify-center lg:text-left lg:items-center customMobflexCol lg:gap-8    customTextalign">
+    <div className="homeLinear font-roboto lg:justify-start grid grid-cols-3 lg:px-12 lg:flex-row justify-center lg:text-left lg:items-center customMobflexCol lg:gap-8    customTextalign">
       <div className="mx-10   mb-5 flex lg:justify-end mt-20  flex-col items-center   lg:col-span-2">
         <picture
           style={{
@@ -51,7 +51,7 @@ export default function Home() {
               {/* {getSettingData?.businessName &&
               getSettingData.businessName.slice(0, 11)} */}
               Vehi
-              <span className="text-logoClr">Smart</span>
+              <span className="text-logoClr">Connect</span>
             </span>
             <br />
             Now Connect with Vehicle Owner.

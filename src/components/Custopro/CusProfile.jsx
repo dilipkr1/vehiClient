@@ -14,12 +14,9 @@ export default function CusProfile() {
   // const [loading, setloading] = useState(true);
   const [activeTab, setActiveTab] = useState("tab1");
 
-  const [errorMessage, setErrorMessage] = useState(null);
-
-  const [formData, setFormData] = useState({
-    phone1: "",
-    phone2: "",
-  });
+  if (!isAuthenticated) {
+    navigate("/login");
+  }
 
   if (!user) {
     return (
@@ -27,51 +24,9 @@ export default function CusProfile() {
     );
   }
 
+ 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
-  };
-  let baseUrl;
-  if (process.env.NODE_ENV === "development") {
-    baseUrl = process.env.REACT_APP_BACKEND_LOCALAPI;
-  } else {
-    baseUrl = process.env.REACT_APP_BACKEND_LIVEAPI;
-  }
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.put(
-        `${baseUrl}/contacts/update-number`,
-        {
-          ...formData,
-          userId: userId,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        console.log("Phone numbers updated successfully");
-        navigate("/profile/updated");
-      } else {
-        console.error("Failed to update phone numbers");
-        throw new Error(
-          response.data.message || "Failed to update phone numbers"
-        );
-      }
-    } catch (error) {
-      console.error("Error updating phone numbers:", error.message);
-      throw new Error(
-        "An unexpected error occurred while updating phone numbers"
-      );
-    }
   };
 
   return (
@@ -113,12 +68,18 @@ export default function CusProfile() {
           <Avatar src="/broken-image.jpg" />
           <div className="flex grid-col-3 justify-start ">
             {user.map((customer, index) => (
-              <div className="flex gap-2" key={index}>
+              <div
+                className="lg:flex justify-center items-center gap-2"
+                key={index}
+              >
                 <div>
                   <p>Name: {customer.customerName}</p>
                 </div>
                 <div>
                   <p>Phone: {customer.customerPhone}</p>
+                </div>
+                <div>
+                  <p>Email: {customer.customerEmail}</p>
                 </div>
               </div>
             ))}

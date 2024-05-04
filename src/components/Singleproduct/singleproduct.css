@@ -1,6 +1,6 @@
 .productSize {
-  max-width: 270px;
-  max-height: 270px;
+  max-width: 300px;
+  max-height: 290px;
   border-radius: 8px;
 }
 @media only screen and (max-width: 767px) {

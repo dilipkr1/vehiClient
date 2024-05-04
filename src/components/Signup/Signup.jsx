@@ -28,7 +28,7 @@ function Signup() {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-   };
+  };
 
   const handleSendOtp = async () => {
     if (formData.phone.length === 10) {
@@ -44,7 +44,7 @@ function Signup() {
         mobileNumber: formData.phone,
       });
 
-       if (response.data.status === 200) {
+      if (response.data.status === 200) {
         setSent("Otp Sent");
       }
     } catch (error) {
@@ -67,7 +67,6 @@ function Signup() {
         mobileNumber: formData.phone,
         enteredOtp: formData.enteredOtp,
       });
-      console.log(response);
       if (response.status === 200) {
         console.log("successfully verified");
         naviagte("/login");
@@ -103,8 +102,7 @@ function Signup() {
           data.message || "Registration failed. Please try again later."
         );
       }
-    } catch (error) {
-     }
+    } catch (error) {}
   };
 
   return (

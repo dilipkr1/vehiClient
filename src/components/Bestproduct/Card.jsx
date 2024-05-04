@@ -11,12 +11,20 @@ export default function () {
     return null;
   }
 
+  const handleClick = () => {
+    const shopElement = document.getElementById("shopsection");
+    if (shopElement) {
+      shopElement.scrollIntoView({ behavior: "smooth" });
+      window.scrollTo(0, 0);
+    }
+  };
+
   return (
     <div className="">
       {packageData.map((mypckg) => (
         <div className="flex justify-center items-center">
           <Link
-            className="lg:flex lg:justify-start justify-center items-center lg:items-start"
+            className="lg:flex lg:justify-start justify-between items-center lg:items-start"
             to="/shop"
           >
             <div className="flex justify-center items-center">
@@ -45,9 +53,7 @@ export default function () {
                   className="align-middle mt-2 flex justify-center items-center"
                   to="/shop"
                 >
-                  <button type="button" class="signup-Btn">
-                    Shop Now
-                  </button>
+                  <span className="signup-Btn">Shop Now</span>
                 </Link>
               </div>{" "}
             </div>

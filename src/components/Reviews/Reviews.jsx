@@ -38,10 +38,13 @@ const Reviews = () => {
             <div class="block rounded-lg bg-white shadow-lg dark:bg-neutral-700 dark:shadow-black/30">
               <div class="h-28 overflow-hidden rounded-t-lg bg-logoClr"></div>
               <div class="mx-auto -mt-12 w-24 overflow-hidden rounded-full border-2 border-white bg-white dark:border-neutral-800 dark:bg-neutral-800">
-                <img style={{ height: "100px", width: "100px" }} src={r2} />
+                <img
+                  style={{ height: "100px", width: "100px" }}
+                  src="https://media.licdn.com/dms/image/D4D03AQF7t-hA_XZNsA/profile-displayphoto-shrink_400_400/0/1698420249430?e=1718841600&v=beta&t=VP9YauQQqJCgLJPOM5dqb3l0izI3ME0CE8E3KDqgbkU"
+                />
               </div>
               <div class="p-6">
-                <h4 class="mb-4 text-2xl font-semibold">Rajesh Meena</h4>
+                <h4 class="mb-4 text-2xl font-semibold">Dilip Raj</h4>
                 <hr />
                 <p class="mt-4">
                   <span class="inline-block pe-2 [&>svg]:w-5">

@@ -12,6 +12,18 @@
     padding-left: 50px;
   }
 
+  .mobCard {
+    width: 100%;
+    margin: 0%;
+    padding: 0%;
+  }
+
+  .productSizeOnShop {
+    max-width: 300px;
+    max-height: 180px;
+    border-radius: 8px;
+  }
+
   .mtforMob {
     display: none;
     /* position: absolute;

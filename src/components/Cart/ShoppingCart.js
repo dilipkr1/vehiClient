@@ -8,7 +8,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { CardGiftcard } from '@mui/icons-material';
 
 // const paymentUrl = window.REACT_APP_PAYMENT_URL;
-const paymentUrl = ' https://rzp.io/l/FlljAUh';
+const paymentUrl = 'https://pages.razorpay.com/pl_Nu85dk5Y6mPTKJ';
 
 
 // import OrderPlaced from '../Shop/OrderPlaced';
@@ -46,8 +46,11 @@ const ShoppingCart = () => {
   }, [cartItems]);
 
   if (!user || user.length === 0) {
-    return ""
+    return <p>Loading</p>
   }
+  const email = user[0].customerEmail;
+  const phone = user[0].customerPhone;
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -89,14 +92,15 @@ const ShoppingCart = () => {
     prev + parseInt(currentProduct.packageDiscount * currentProduct.packagePrice / 100), 0,
   )
   const totalAmountBeforeTax = parseInt(totalCartPrice - totalDiscount)
-  const taxAmount = parseInt(totalAmountBeforeTax * 18 / 100)
+  const taxAmount = 0;
+  // parseInt(totalAmountBeforeTax * 18 / 100)
   const subTotal = (totalAmountBeforeTax + taxAmount).toFixed(2)
 
   const generateOrderId = () => {
     const currentDate = new Date();
-    const formattedDate = currentDate.toISOString().slice(0, 10).replace(/-/g, '');
-    const randomDigits = Math.floor(1000 + Math.random() * 900);
-    const orderId = `${formattedDate}-${randomDigits}`;
+    const formattedDate = currentDate.toISOString().slice(5, 10).replace(/-/g, '');
+    const randomDigits = Math.floor(1000 + Math.random() * 9000); // Generates a 4-digit random number
+    const orderId = formattedDate + String(randomDigits).padStart(4, '0'); // Ensures 4 digits
     return orderId;
   };
 
@@ -104,7 +108,9 @@ const ShoppingCart = () => {
   function generateUID() {
     const min = 1000;
     const max = 9999;
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+    const result = Math.floor(Math.random() * (max - min + 1)) + min;
+    const x = "VT" + result
+    return x;
   }
 
   const orderId = generateOrderId()
@@ -150,7 +156,7 @@ const ShoppingCart = () => {
       const response = await axios.post(`${baseUrl}/orders/place-order`, cartData);
       if (response.status === 201) {
         console.log("successfully checkout")
-        window.location.href = `${paymentUrl}`;
+        window.location.href = `${paymentUrl}/view?email=${email}&phone=${phone}`;
       }
 
     } catch (error) {
@@ -214,15 +220,15 @@ const ShoppingCart = () => {
       <form onSubmit={handleSubmit} >
         <div className='flex flex-col font-sans text-xl p-2  m-1 '>
           {errorMessge && <p className='text-red text-xs font-bold font-sans  tracking-wide'>{errorMessge}</p>}
-          <div className='flex flex-col gap-1'>
+          <div className='flex flex-col gap-2'>
             <div className='flex flex-col justify-start'>
-              <input name='car_No' maxLength={20} required onChange={handleChange} className='w-full border border-t-0 border-r-0 border-l-0 
+              <input name='car_No' maxLength={20} required onChange={handleChange} className='w-full border  border-t-0 border-r-0 border-l-0 
           border-b-1 font-sans border-black text-black  text-xl border-opacity-30 p-1 outline-none' type="text" placeholder='Enter Your Vehicle Number' />
 
               <div className='address flex flex-col gap-4 my-3'>
-                <input name='stAddress' required maxLength={200} onChange={handleChange} className='w-full border border-t-0 border-r-0 border-l-0 
+                <input name='stAddress' required maxLength={200} onChange={handleChange} className='w-full mt-1 border border-t-0 border-r-0 border-l-0 
           border-b-1 font-sans border-black text-black  text-xl border-opacity-30 p-1 outline-none' type="text" placeholder='Street Address' />
-                <select required name='stateAddress' onChange={handleChange}>
+                <select className='mt-1' required name='stateAddress' onChange={handleChange}>
                   <option value="" selected disabled hidden>Choose State</option>
                   <option value="AP">Andhra Pradesh</option>
                   <option value="AR">Arunachal Pradesh</option>
@@ -261,7 +267,7 @@ const ShoppingCart = () => {
                   <option value="LD">Lakshadweep</option>
                   <option value="PY">Puducherry</option>
                 </select>
-                <input required name='pinCode' onChange={handleChange} maxLength={200} className='w-full border border-t-0 border-r-0 border-l-0 
+                <input required name='pinCode' onChange={handleChange} maxLength={200} className='mt-1 w-full border border-t-0 border-r-0 border-l-0 
           border-b-1 font-sans border-black text-black  text-xl border-opacity-30 p-1 outline-none' type="text" placeholder='Pin Code' />
 
               </div>
@@ -279,7 +285,9 @@ const ShoppingCart = () => {
           <div className='flex flex-col p-2 '>
             <span style={{ fontSize: "1.1rem" }} className='flex justify-between tracking-wide   text-sm font-bold font-sans  grid-'><span className='pr-14'> Total:</span> <span><b>₹ </b>{totalCartPrice} /-</span></span>
             {/* <span className='flex justify-between   tracking-wide text-sm font-sans font-normal'><span className='pr-9'>Discount :  </span><span><b>-</b>{parseInt(totalDiscount)}</span></span> */}
-            <span style={{ fontSize: "1.1rem" }} className=' flex justify-between   tracking-wide font-sans font-bold '><span className='pr-17'>GST(18%) : </span><span><b>₹ </b>{taxAmount} /-</span></span>
+            <span style={{ fontSize: "0/85rem" }} className=' flex justify-between   tracking-wide font-sans font-bold '><span className='pr-17'>GST Included(18%) </span>
+              {/* <span><b>₹ </b>{taxAmount} /-</span> */}
+            </span>
             <span className='flex py-0 justify-between  tracking-wide font-bold text-xl '> <span className='pr-5'>SubTotal :  </span><span><b>₹ </b>{subTotal} /-</span></span>
             {/* <span className='flex py-0 justify-between  tracking-wide font-bold text-xl '> <sub className='pr-5'>Payable Amount</sub> <span><b style={{fontWeight:"500"}}></b> Year</span></span> */}
 

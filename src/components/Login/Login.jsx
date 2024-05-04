@@ -66,7 +66,6 @@ export default function Login() {
   const [success, setSuccess] = useState(null);
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    console.log(formData);
   };
 
   const handleSendOtp = async () => {
@@ -89,7 +88,7 @@ export default function Login() {
         error.response.data &&
         error.response.data.message
       ) {
-        setOtpErrro("Server Err " || error.response.data.message);
+        conosle.log("Server Err " || error.response.data.message);
       } else {
         setOtpErrro("Failed to send OTP. Please try again.");
       }
@@ -97,6 +96,10 @@ export default function Login() {
   };
 
   const handleSendBtn = async () => {
+    if (formData.mobileNumber.length !== 10) {
+      setError("Please enter your mobile number!");
+      return;
+    }
     setSendText(false);
     setForgot(true);
     await handleSendOtp();
@@ -112,8 +115,7 @@ export default function Login() {
         mobileNumber: formData.mobileNumber,
         enteredOtp: formData.enteredOtp,
       });
-      console.log(response);
-      if (response.status === 200) {
+       if (response.status === 200) {
         setNewPassword(true);
         setForgot(false);
         console.log("successfully verified");
@@ -143,7 +145,6 @@ export default function Login() {
   };
 
   const handleChangePassword = async () => {
-    console.log("from Change Pass", formData);
     const url = `${baseUrl}/auth/change-pass`;
     try {
       const response = await axios.post(url, formData, {
@@ -331,7 +332,7 @@ export default function Login() {
                       className="text-center tracking-wide p-2 bg-black text-white"
                       onClick={handleSendBtn}
                     >
-                      Send Otp
+                      Reset Password
                     </button>
                   </div>
                 ) : (

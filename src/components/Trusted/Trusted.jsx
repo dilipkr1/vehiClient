@@ -6,8 +6,8 @@ const Trusted = () => {
     <div className="mt-20 ">
       <div className="header text-pgcolor tracking-wider  text-center lg:text-4xl text-3xl my-5 font-bold font-roboto">
         <h2 className="w-full textwidthOnMob textwidthcxyServices ">
-          Trusted by 150,000 users, Buy the tag today to join the world of
-          privacy.
+          Trusted by 150,000 &nbsp; &nbsp;users, Buy the tag &nbsp; &nbsp;today
+          to join the world of privacy.
         </h2>
       </div>
 

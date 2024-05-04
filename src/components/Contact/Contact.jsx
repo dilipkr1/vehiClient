@@ -37,15 +37,12 @@ function Contact() {
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
-    }));
-    console.log(formData)
+    })); 
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log(baseUrl);
-    const url = `${baseUrl}/create-user-query`;
-    console.log(url);
+    e.preventDefault(); 
+    const url = `${baseUrl}/create-user-query`; 
     try {
       const response = await axios.post(url, {
         ...formData,
@@ -106,7 +103,7 @@ function Contact() {
                 className="text-shopbgcolor"
                 href={`tel:${getSettingData?.phone}`}
               >
-                +91{getSettingData?.phone}
+                {/* +91{getSettingData?.phone} */}
               </a>
             </p>
           </div>

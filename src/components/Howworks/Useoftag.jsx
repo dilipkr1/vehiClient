@@ -17,7 +17,7 @@ export default function Workdetails() {
         <div>
           <div className="flex justify-center items-center">
             <img
-              style={{ maxWidth: "75px" }}
+              style={{ maxWidth: "65px" }}
               className="useofTagImg"
               src={useoftag1}
               alt="useoftag1"
@@ -41,7 +41,7 @@ export default function Workdetails() {
         <div>
           <div className="flex justify-center items-center">
             <img
-              style={{ maxWidth: "75px" }}
+              style={{ maxWidth: "65px" }}
               className="useofTagImg"
               src={useoftag2}
               alt="useoftag2"
@@ -52,7 +52,7 @@ export default function Workdetails() {
           </h5>
 
           <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-            VehiSmart offers invaluable support in safeguarding the well-being
+            VehiConnect offers invaluable support in safeguarding the well-being
             of your loved ones, even in unforeseen emergencies.
           </p>
         </div>
@@ -65,7 +65,7 @@ export default function Workdetails() {
         <div className="">
           <div className="flex justify-center items-center">
             <img
-              style={{ maxWidth: "75px" }}
+              style={{ maxWidth: "65px" }}
               className="useofTagImg"
               src={useoftag3}
               alt="useoftag3"
@@ -89,7 +89,7 @@ export default function Workdetails() {
         <div className="">
           <div className="flex justify-center items-center">
             <img
-              style={{ maxWidth: "75px" }}
+              style={{ maxWidth: "65px" }}
               className="useofTagImg"
               src={useoftag4}
               alt="useoftag4"

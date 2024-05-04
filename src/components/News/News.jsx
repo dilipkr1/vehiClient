@@ -19,8 +19,7 @@ export default function News() {
           throw new Error("Network response was not ok");
         }
 
-        const data = await response.json();
-        console.log(response, data);
+        const data = await response.json(); 
         setNews(data.articles);
       } catch (error) {
         console.error("Error:", error);

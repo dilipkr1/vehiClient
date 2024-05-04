@@ -1,7 +1,7 @@
 import Bestsellingpro from "./components/Bestproduct/Bestsellingpro";
 import Home from "./components/Home/Home";
 import Workdetails from "./components/Howworks/Useoftag";
-import News from "./components/News/News";
+// import News from "./components/News/News";
 import VehiFeatures from './components/Fetures/VehiFeatures'
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Shop from "./components/Shop/Shop";
@@ -26,9 +26,13 @@ import About from "./components/About/About";
 import Points from "./components/Points/Points";
 import Trusted from "./components/Trusted/Trusted";
 import Razpay from './components/Razorpay/Razpay'
+import { AuthContext } from "./context/AuthContext";
+import { useContext } from "react";
+import Activate from "./components/Activate/Activate";
 
 function App() {
-  
+  const { state, isAuthenticated } = useContext(AuthContext);
+
   return (
 
     <div className="App" >
@@ -72,21 +76,25 @@ function App() {
                 <Route path="checkout" element={<Checkout />} />
               </Route>
             </Route>
-            <Route path="/profile"  >
+            <Route path="/profile"   >
               <Route index element={<CusProfile />} />
               <Route path="/profile/orders" element={< CusOrders />} />
               <Route path="/profile/:uid" element={<GetUid />} />
               <Route path="/profile/updated" element={<OrderPlaced title="Successfully Updated" paragraph="see now " />} />
 
             </Route>
-
+            {/* :
+              <Route path="/login" element={<Login />} />
+            } */}
+ 
             <Route path="contact" element={<Contact />} />
+            <Route path="pay" element={<Razpay />} />
+
             {/* <Route path="news" element={<News />} /> */}
             <Route path="about" element={<About />} />
-            {/* <Route path="pay" element={<Razpay />} /> */}
-
-
-            <Route path="*" element={<Nopage />} />
+            <Route path="activation" element={<Activate />} />
+             {/* <Route path="pay" element={<Razpay />} /> */}
+             <Route path="*" element={<Nopage />} />
 
           </Route>
         </Routes>

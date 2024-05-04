@@ -10,12 +10,13 @@ function Points() {
         </div>
         <div class="flex justify-start items-center">
           <div className="heading gap-3 mt-3">
-            <h3 className="text-pgcolor textwidthVf text-2xl font-bold">
+            <h3 className="text-pgcolor textWidthPoints text-2xl font-bold">
               WHAT MAKES US DIFFERENT?
             </h3>
             <div className="title my-2">
-              <h1 className="text-main textwidthVf lg:text-4xl text-3xl font-bold tracking-wide">
-                We love to innovate, We are improving and expanding fast.
+              <h1 className="text-main textWidthPoints lg:text-4xl text-3xl font-bold tracking-wide">
+                We love to innovate, We are improving &nbsp;&nbsp;&nbsp; and
+                expanding fast.
               </h1>
               <div className="points flex flex-col mt-8 flexColMob">
                 <div className="flex flexColMob lg:gap-4">
@@ -63,9 +64,9 @@ function Points() {
                     </span>
 
                     <p className="w-15">
-                      We will take your feedback and will implement
-                      <br />
-                      Do try us.
+                      We will take your feedback and will &nbsp; &nbsp;&nbsp;
+                      &nbsp;&nbsp; &nbsp;
+                      <br /> implement Do try us.
                     </p>
                   </div>
 

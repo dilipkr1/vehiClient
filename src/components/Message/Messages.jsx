@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import vehicln from "../../images/vehiclean.png";
 import { CustomerContext } from "../../context/customrContext";
 import { Input } from "@mui/material";
+import { OrderContext } from "../../context/OrderContext";
 
 export default function Messages({ userId }) {
   const navigate = useNavigate();
@@ -14,6 +15,8 @@ export default function Messages({ userId }) {
   const { customerData } = useContext(CustomerContext);
   const [enteredCar_No, setEnteredCar_No] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const { orderData } = useContext(OrderContext);
+
   let baseUrl;
   if (process.env.NODE_ENV === "development") {
     baseUrl = process.env.REACT_APP_BACKEND_LOCALAPI;
@@ -22,15 +25,27 @@ export default function Messages({ userId }) {
   }
 
   useEffect(() => {
-    if (userId && customerData) {
+    if (userId && customerData && orderData) {
       setIsLoading(false);
     }
-  }, [userId, customerData]);
+  }, [userId, customerData, orderData]);
 
-  if (!customerData) {
+  if (!customerData || !orderData) {
     return <p>Loading..</p>;
   }
 
+  const foundUserIds = orderData.cartItems.filter(
+    (order) => order.userId === userId
+  );
+  foundUserIds.forEach((order) => {
+    localStorage.setItem("phone1", order.cartItems[0].phone1);
+    localStorage.setItem("phone2", order.cartItems[0].phone2);
+  });
+
+  const phone1 = localStorage.getItem("phone1");
+  const phone2 = localStorage.getItem("phone2");
+
+  // }
   const foundCustomer = customerData.find(
     (customer) => customer.userId === userId
   );
@@ -49,13 +64,20 @@ export default function Messages({ userId }) {
   const ownerPhoneNum = localStorage.getItem("ownerPhoneNum");
   const ownerName = localStorage.getItem("ownerName");
   const carNumber = localStorage.getItem("car_No");
-  console.log(isSpamMsg);
+
+  let lastFourDigits;
+  if (carNumber) {
+    lastFourDigits = carNumber.toString().slice(-4);
+  }
+
+  console.log(lastFourDigits, ownerPhoneNum, phone1, phone2);
 
   let car_status = [
     "The lights of this car are on.",
     "The car is in no parking.",
     "There is a baby or pet in the car.",
     "The window or car is open.",
+    "In case of Accident",
     "Something wrong with this car.",
   ];
 
@@ -65,25 +87,22 @@ export default function Messages({ userId }) {
     setMessage(index);
   };
 
-  // const myMessageFormat
-
   const sendMessage = async (e) => {
     e.preventDefault();
     try {
-      console.log("not returned before");
       const response = await axios.post(`${baseUrl}/msg/send-message`, {
         message: `Hi ${ownerName}, a user reported 
 Your Vehicle Number #${carNumber} 
 ${getmessage} 
 This message is generated from QR code on your vehicle
 Regards
-VehiSmart`,
+VehiConnect`,
         numbers: ownerPhoneNum,
       });
 
       if (response.status === 200) {
-        localStorage.clear();
         navigate("/message/success");
+        localStorage.clear();
       }
     } catch (error) {
       localStorage.removeItem("ownerPhoneNum");
@@ -103,7 +122,7 @@ VehiSmart`,
 
   const handleCall = async () => {
     const key = temperoryKey;
-    const number = ownerPhoneNum;
+    const number = ownerPhoneNum || phone1 || phone2;
 
     try {
       const response = await fetch(`${baseUrl}/msg/send-call`, {
@@ -124,7 +143,6 @@ VehiSmart`,
       localStorage.clear();
       console.error("Error:", error);
     }
-    n;
   };
 
   return (
@@ -215,6 +233,20 @@ VehiSmart`,
                 <span className="checkmark"></span>
               </label>
               <label
+                className={`custom ${selectedOption === "acc" ? "active" : ""}`}
+                onClick={() => changeBackgroundColor("acc")}
+              >
+                <i className="fa-solid fa-window-maximize pr-2"></i>In case of
+                Accident
+                <input
+                  type="radio"
+                  name="radio"
+                  value="4"
+                  onClick={handleMessage}
+                />
+                <span className="checkmark"></span>
+              </label>
+              <label
                 className={`custom ${
                   selectedOption === "wrong" ? "active" : ""
                 }`}
@@ -225,21 +257,21 @@ VehiSmart`,
                 <input
                   type="radio"
                   name="radio"
-                  value="4"
+                  value="5"
                   onClick={handleMessage}
                 />
                 <span className="checkmark"></span>
               </label>
             </div>
             <div className="p-3">
-              {carNumber !== enteredCar_No ? (
+              {lastFourDigits !== enteredCar_No ? (
                 <p className="text-xs text-red tracking-wide">
-                  Please Enter Valid Car Number
+                  Please Enter Valid Vehicle Number
                 </p>
               ) : (
                 " "
               )}
-              {carNumber !== enteredCar_No ? (
+              {lastFourDigits !== enteredCar_No ? (
                 <input
                   onChange={(e) => setEnteredCar_No(e.target.value)}
                   type="text"
@@ -249,10 +281,10 @@ VehiSmart`,
             "
                 />
               ) : (
-                " "
+                ""
               )}
             </div>
-            {carNumber === enteredCar_No && (
+            {lastFourDigits === enteredCar_No && (
               <div className="contactBtn text-white">
                 {isSpamMsg === "true" ? (
                   <span className="cursor-pointer btn">Can't Message</span>
@@ -288,7 +320,7 @@ VehiSmart`,
               </a>
               <a className="link" href="https://vehiclean.in/connect">
                 <span className="text-xs text-pgcolor tracking-tight font-extralight">
-                  Connect with VehiSmart
+                  Connect with VehiConnect
                 </span>
               </a>
             </p>

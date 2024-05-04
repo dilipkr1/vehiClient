@@ -6,6 +6,10 @@ p {
   .dontDisplayOnmob {
     /* display: none; */
   }
+
+  .mobPadd {
+    padding: 0 20px;
+  }
   .MobView {
     display: flex;
     flex-direction: column;
