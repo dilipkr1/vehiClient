@@ -71,12 +71,15 @@ export default function () {
             </li>
             <li>
               <a href="/about">About Us</a>
+            </li>{" "}
+            <li>
+              <a href="/refund">Refund-Policy</a>
             </li>
             <li>
-              <a href="#">Terms & condtions</a>
+              <a href="/terms">Terms & condtions</a>
             </li>
             <li>
-              <a href="#">Privcy & Policy</a>
+              <a href="/privacy">Privcy & Policy</a>
             </li>
           </ul>
         </div>
@@ -85,12 +88,12 @@ export default function () {
           <a href={`mailto:${getSettingData?.email}`}>
             {getSettingData?.email}
           </a>
-          {/* <a href="tel:+91{getSettingData?.phone}">
+          <a href="tel:+91{getSettingData?.phone}">
             +91{getSettingData?.phone}
-          </a> */}
+          </a>
           <span
             className="tracking-wider"
-            // href="https://maps.app.goo.gl/qDJCPWuXXKk7mZ647"
+            href="https://maps.app.goo.gl/qDJCPWuXXKk7mZ647"
           >
             {getSettingData?.address}
           </span>

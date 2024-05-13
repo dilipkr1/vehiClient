@@ -3,10 +3,11 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
-
-import SaveAsIcon from "@mui/icons-material/SaveAs";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CusOrders from "../Custorder/CusOrders";
 import Cusconfig from "../CusConfig/Cusconfig";
+import Inventory2Icon from "@mui/icons-material/Inventory2";
+
 export default function CusProfile() {
   const navigate = useNavigate();
   const { state, isAuthenticated } = useContext(AuthContext);
@@ -20,11 +21,12 @@ export default function CusProfile() {
 
   if (!user) {
     return (
-      <div className="text-xl font-sans tracking-wide">User Not Found</div>
+      <div className="flex justify-center items-center h-screen">
+        <img src={loadingGif} alt="Loading" />
+      </div>
     );
   }
 
- 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
@@ -34,58 +36,67 @@ export default function CusProfile() {
       style={{ height: "100vh" }}
       className="my-20 pt-20  gap-1 flex flex-col "
     >
-      <div className="flex justify-center items-center gap-5 p-3 bg-logoClr font-bold text-xl">
-        <div className={`tab1 ${activeTab === "tab1" ? "active" : ""}`}>
+      <div className="flex flex-col h-screen ">
+        <div className="bg-logoClr  flex justify-center items-center gap-14 p-3 font-bold text-xl">
           <button
+            className={`tab-button ${
+              activeTab === "tab1" ? "active" : ""
+            } text-xl`}
             onClick={() => handleTabClick("tab1")}
-            className="underline tracking-wide text-xl fotn-bold font-sans px-3 text-white"
           >
+            <AccountCircleIcon />
             Profile
           </button>
-        </div>
-        <div className={`tab2 ${activeTab === "tab2" ? "active" : ""}`}>
           <button
+            className={`tab-button ${activeTab === "tab2" ? "active" : ""}`}
             onClick={() => handleTabClick("tab2")}
-            className="underline tracking-wide text-xl fotn-bold font-sans px-3 text-white"
           >
+            <Inventory2Icon />
             Orders
           </button>
-        </div>
-        <div className={`tab3 ${activeTab === "tab3" ? "active" : ""}`}>
           <button
+            className={`tab-button ${activeTab === "tab3" ? "active" : ""}`}
             onClick={() => handleTabClick("tab3")}
-            className="underline tracking-wide text-xl fotn-bold font-sans px-3 text-white"
           >
-            Config..
+            <i class="fa-solid fa-gears fa-2x"></i> Configauration
           </button>
         </div>
-      </div>
-      {activeTab === "tab2" && <CusOrders />}
-      {activeTab === "tab3" && <Cusconfig />}
-
-      {activeTab === "tab1" && (
-        <div className="mt-5  mx-20   px-20 flex  flex-col justify-center items-center  gap-1">
-          <Avatar src="/broken-image.jpg" />
-          <div className="flex grid-col-3 justify-start ">
-            {user.map((customer, index) => (
-              <div
-                className="lg:flex justify-center items-center gap-2"
-                key={index}
-              >
-                <div>
-                  <p>Name: {customer.customerName}</p>
-                </div>
-                <div>
-                  <p>Phone: {customer.customerPhone}</p>
-                </div>
-                <div>
-                  <p>Email: {customer.customerEmail}</p>
-                </div>
+        <div className="flex-grow overflow-y-auto">
+          {activeTab === "tab2" && <CusOrders />}
+          {activeTab === "tab3" && <Cusconfig />}
+          {activeTab === "tab1" && (
+            <div className="m-5 flex justify-center">
+              <div className="bg-white rounded-lg shadow-lg p-8 max-w-lg w-full">
+                <Avatar
+                  style={{ fontSize: "40px" }}
+                  src="/broken-image.jpg"
+                  className="mx-auto mb-4"
+                />
+                {user.map((customer, index) => (
+                  <div key={index} className="flex flex-col gap-4">
+                    <div className="flex justify-between">
+                      <div className="flex justify-start ">
+                        <p className="text-gray-600">Name:</p>
+                        <p className="font-semibold">{customer.customerName}</p>
+                      </div>
+                      <div className="flex justify-start ">
+                        <p className="text-gray-600">Phone:</p>
+                        <p className="font-semibold">
+                          {customer.customerPhone}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex justify-start ">
+                      <p className="text-gray-600">Email:</p>
+                      <p className="font-semibold">{customer.customerEmail}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }

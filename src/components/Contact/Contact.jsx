@@ -103,7 +103,7 @@ function Contact() {
                 className="text-shopbgcolor"
                 href={`tel:${getSettingData?.phone}`}
               >
-                {/* +91{getSettingData?.phone} */}
+                +91{getSettingData?.phone}
               </a>
             </p>
           </div>
@@ -143,8 +143,7 @@ function Contact() {
             </ul>
           </div>
         </div>
-
-        {/* below will be at ritht */}
+ 
 
         <div className="flex shadow-2xl shadow-logoClr flex-col letsConnect bg-white mt-5 lg:p-8 p-2 lg:ml-20 rounded-2xl lg:w-100">
           <h5 className="text-4xl font-black   text-main">Lets Connect</h5>

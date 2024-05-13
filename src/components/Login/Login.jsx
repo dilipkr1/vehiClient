@@ -115,7 +115,7 @@ export default function Login() {
         mobileNumber: formData.mobileNumber,
         enteredOtp: formData.enteredOtp,
       });
-       if (response.status === 200) {
+      if (response.status === 200) {
         setNewPassword(true);
         setForgot(false);
         console.log("successfully verified");
@@ -178,7 +178,7 @@ export default function Login() {
         setIsAuthenticated(true);
         const { token, existingUser } = response.data;
         localStorage.setItem("token", token);
-        navigate("/");
+        navigate("/shop");
         window.location.reload();
       } else {
         const errorData = response.data;
@@ -196,7 +196,7 @@ export default function Login() {
         const token = localStorage.getItem("token");
         if (token) {
           setIsAuthenticated(true);
-          navigate("/");
+          navigate("/profile");
         }
       } catch (error) {
         console.error("Fetch Error:", error);

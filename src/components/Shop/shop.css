@@ -24,6 +24,12 @@
     border-radius: 8px;
   }
 
+  .productSizeOnOrders {
+    max-width: 300px;
+    max-height: 180px;
+    border-radius: 8px;
+  }
+
   .mtforMob {
     display: none;
     /* position: absolute;

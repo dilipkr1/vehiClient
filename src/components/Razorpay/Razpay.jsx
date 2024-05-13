@@ -24,15 +24,14 @@ const RazPay = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        `${baseUrl}/payment`,
-        formData
-      );
+      const response = await axios.post(`${baseUrl}/payment`, formData);
       console.log(response.data);
-      // Redirect user to the payment page or handle the response accordingly
+      const redirectURL = response.headers.location;
+      console.log(redirectURL);
+      // Get the redirect URL from the response headers
+      window.location.href = redirectURL; // Redirect the user to the URL
     } catch (error) {
       console.error("Error initiating payment:", error);
-      // Handle error
     }
   };
 

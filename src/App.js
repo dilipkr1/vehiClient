@@ -29,6 +29,9 @@ import Razpay from './components/Razorpay/Razpay'
 import { AuthContext } from "./context/AuthContext";
 import { useContext } from "react";
 import Activate from "./components/Activate/Activate";
+import Terms from "./components/TermsAnd Privacty/Terms";
+import Privacy from "./components/TermsAnd Privacty/Privacy";
+import Refund from "./components/TermsAnd Privacty/Refund";
 
 function App() {
   const { state, isAuthenticated } = useContext(AuthContext);
@@ -38,7 +41,6 @@ function App() {
     <div className="App" >
       <BrowserRouter>
         <Routes  >
-
           <Route path="/" element={<Layout />}>
             <Route
               index
@@ -86,15 +88,20 @@ function App() {
             {/* :
               <Route path="/login" element={<Login />} />
             } */}
- 
+
             <Route path="contact" element={<Contact />} />
+            <Route path="terms" element={<Terms />} />
+            <Route path="privacy" element={<Privacy />} />
+            <Route path="refund" element={<Refund />} />
+
+
             <Route path="pay" element={<Razpay />} />
 
             {/* <Route path="news" element={<News />} /> */}
             <Route path="about" element={<About />} />
             <Route path="activation" element={<Activate />} />
-             {/* <Route path="pay" element={<Razpay />} /> */}
-             <Route path="*" element={<Nopage />} />
+            {/* <Route path="pay" element={<Razpay />} /> */}
+            <Route path="*" element={<Nopage />} />
 
           </Route>
         </Routes>

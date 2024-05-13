@@ -7,6 +7,8 @@ import Shopcart from "../Cart/ShoppingCart";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import pckg1Img from "../../images/pckg1.jpg";
+import loadingGif from "../../images/loading.gif";
+
 export default function Shop() {
   const navigate = useNavigate();
   const { dispatch } = useContext(CartContext);
@@ -30,7 +32,11 @@ export default function Shop() {
   };
 
   if (!packageData || packageData.length === 0) {
-    return <p>Loading</p>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <img src={loadingGif} alt="Loading" />
+      </div>
+    );
   }
 
   const handleCarMob = () => {

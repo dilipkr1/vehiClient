@@ -29,8 +29,8 @@ const Reviews = () => {
                     <path d="M0 216C0 149.7 53.7 96 120 96h8c17.7 0 32 14.3 32 32s-14.3 32-32 32h-8c-30.9 0-56 25.1-56 56v8h64c35.3 0 64 28.7 64 64v64c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V320 288 216zm256 0c0-66.3 53.7-120 120-120h8c17.7 0 32 14.3 32 32s-14.3 32-32 32h-8c-30.9 0-56 25.1-56 56v8h64c35.3 0 64 28.7 64 64v64c0 35.3-28.7 64-64 64H320c-35.3 0-64-28.7-64-64V320 288 216z" />
                   </svg>
                 </span>
-                Scan QR, report accidents fast. <br /> Essential for parking
-                emergencies
+                Fast QR scanning, quick accident reporting.
+                <br /> Essential for parking safety and emergencies.
               </p>
             </div>
           </div>
@@ -56,8 +56,9 @@ const Reviews = () => {
                       <path d="M0 216C0 149.7 53.7 96 120 96h8c17.7 0 32 14.3 32 32s-14.3 32-32 32h-8c-30.9 0-56 25.1-56 56v8h64c35.3 0 64 28.7 64 64v64c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V320 288 216zm256 0c0-66.3 53.7-120 120-120h8c17.7 0 32 14.3 32 32s-14.3 32-32 32h-8c-30.9 0-56 25.1-56 56v8h64c35.3 0 64 28.7 64 64v64c0 35.3-28.7 64-64 64H320c-35.3 0-64-28.7-64-64V320 288 216z" />
                     </svg>
                   </span>
-                  Quickly connect to parking management. <br /> Easy solution
-                  for accidents
+                  Effortless parking management connection,
+                  <br /> easy accident resolution. Simplifying parking
+                  emergencies
                 </p>
               </div>
             </div>
@@ -69,7 +70,7 @@ const Reviews = () => {
                 <img style={{ height: "100px", width: "100px" }} src={r3} />
               </div>
               <div class="p-6">
-                <h4 class="mb-4 text-2xl font-semibold">GANESH KUMAR SAINI</h4>
+                <h4 class="mb-4 text-2xl font-semibold">Rohit KUMAR SAINI</h4>
                 <hr />
                 <p class="mt-4">
                   <span class="inline-block pe-2 [&>svg]:w-5">
@@ -82,7 +83,8 @@ const Reviews = () => {
                     </svg>
                   </span>
                   Efficient QR system for parking accidents.
-                  <br /> Lifesaver in emergencies!
+                  <br /> Highly recommended for safety
+                  <br />
                 </p>
               </div>
             </div>

@@ -6,6 +6,7 @@ import vehicln from "../../images/vehiclean.png";
 import { CustomerContext } from "../../context/customrContext";
 import { Input } from "@mui/material";
 import { OrderContext } from "../../context/OrderContext";
+import loadingGif from "../../images/loading.gif";
 
 export default function Messages({ userId }) {
   const navigate = useNavigate();
@@ -31,7 +32,11 @@ export default function Messages({ userId }) {
   }, [userId, customerData, orderData]);
 
   if (!customerData || !orderData) {
-    return <p>Loading..</p>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <img src={loadingGif} alt="Loading" />
+      </div>
+    );
   }
 
   const foundUserIds = orderData.cartItems.filter(
@@ -40,6 +45,7 @@ export default function Messages({ userId }) {
   foundUserIds.forEach((order) => {
     localStorage.setItem("phone1", order.cartItems[0].phone1);
     localStorage.setItem("phone2", order.cartItems[0].phone2);
+    localStorage.setItem("car_No", order.cartItems[0].car_No);
   });
 
   const phone1 = localStorage.getItem("phone1");
@@ -56,7 +62,6 @@ export default function Messages({ userId }) {
     localStorage.setItem("ownerName", foundCustomer.customerName);
     localStorage.setItem("isAllowedPhone", foundCustomer.isAllowedPhone);
     localStorage.setItem("isAllowedMsg", foundCustomer.isAllowedMsg);
-    localStorage.setItem("car_No", foundCustomer.car_No[0]);
   }
 
   const isSpamMsg = localStorage.getItem("isAllowedMsg");

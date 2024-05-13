@@ -7,6 +7,8 @@ import ShoppingCart from "../Cart/ShoppingCart";
 import "./singleproduct.css";
 import { AuthContext } from "../../context/AuthContext";
 import pckg1Img from "../../images/pckg1.jpg";
+import loadingGif from "../../images/loading.gif";
+
 export default function Singleproduct() {
   const navigate = useNavigate();
   const { productId } = useParams();
@@ -26,12 +28,20 @@ export default function Singleproduct() {
   };
 
   if (!packageData || packageData.length === 0) {
-    return <p>Loading...</p>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <img src={loadingGif} alt="Loading" />
+      </div>
+    );
   }
 
   const product = packageData.find((item) => item._id === productId);
   if (!product) {
-    return <p>Loading...</p>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <img src={loadingGif} alt="Loading" />
+      </div>
+    );
   }
 
   return (

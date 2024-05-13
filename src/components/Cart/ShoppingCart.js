@@ -6,6 +6,7 @@ import axios from "axios"
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import { CardGiftcard } from '@mui/icons-material';
+import loadingGif from "../../images/loading.gif";
 
 // const paymentUrl = window.REACT_APP_PAYMENT_URL;
 const paymentUrl = 'https://pages.razorpay.com/pl_Nu85dk5Y6mPTKJ';
@@ -25,7 +26,9 @@ const ShoppingCart = () => {
     stAddress: "",
     stateAddress: "",
     pinCode: "",
-    car_No: ""
+    car_No: "",
+    vehiType: ""
+
   })
   let baseUrl;
   if (process.env.NODE_ENV === 'development') {
@@ -33,11 +36,9 @@ const ShoppingCart = () => {
   } else {
     baseUrl = process.env.REACT_APP_BACKEND_LIVEAPI;
   }
-
-
+ 
 
   useEffect(() => {
-
     if (cartItems.length > 1 || cartItems.some(item => item.quantity > 1)) {
       setErrorMessage('Please Note only one product per transaction!');
     } else {
@@ -46,7 +47,7 @@ const ShoppingCart = () => {
   }, [cartItems]);
 
   if (!user || user.length === 0) {
-    return <p>Loading</p>
+    return
   }
   const email = user[0].customerEmail;
   const phone = user[0].customerPhone;
@@ -59,6 +60,7 @@ const ShoppingCart = () => {
       [name]: value,
     }));
 
+    console.log(formData)
 
   }
 
@@ -127,6 +129,9 @@ const ShoppingCart = () => {
   cartItems.forEach(item => {
     const uids = Array.from({ length: item.quantity }, () => generateUID());
 
+
+    let crno = formData.vehiType === 'cr' ? `C-${formData.car_No}` : `B-${formData.car_No}`;
+    console.log(crno)
     uids.forEach(uid => {
       cartData.cartItems.push({
         orderId: orderId,
@@ -134,14 +139,14 @@ const ShoppingCart = () => {
         quantity: 1,
         product_id: item._id,
         uid: uid,
-        car_No: formData.car_No,
+        car_No: crno,
+        vehiType: formData.vehiType,
         stAdress: formData.stAddress || null,
         stateAddress: formData.stateAddress || null,
         pinCode: formData.pinCode || null
       });
     });
   });
-
 
   if (!isAuthenticated || !user || user.length === 0) {
     return navigate("/login");
@@ -222,13 +227,11 @@ const ShoppingCart = () => {
           {errorMessge && <p className='text-red text-xs font-bold font-sans  tracking-wide'>{errorMessge}</p>}
           <div className='flex flex-col gap-2'>
             <div className='flex flex-col justify-start'>
-              <input name='car_No' maxLength={20} required onChange={handleChange} className='w-full border  border-t-0 border-r-0 border-l-0 
+              <input name='car_No' maxLength={20} required onChange={handleChange} className='w-full border uppercase  border-t-0 border-r-0 border-l-0 
           border-b-1 font-sans border-black text-black  text-xl border-opacity-30 p-1 outline-none' type="text" placeholder='Enter Your Vehicle Number' />
 
               <div className='address flex flex-col gap-4 my-3'>
-                <input name='stAddress' required maxLength={200} onChange={handleChange} className='w-full mt-1 border border-t-0 border-r-0 border-l-0 
-          border-b-1 font-sans border-black text-black  text-xl border-opacity-30 p-1 outline-none' type="text" placeholder='Street Address' />
-                <select className='mt-1' required name='stateAddress' onChange={handleChange}>
+                <select className='mt-1 py-2 bg-black text-white rounded' required name='stateAddress' onChange={handleChange}>
                   <option value="" selected disabled hidden>Choose State</option>
                   <option value="AP">Andhra Pradesh</option>
                   <option value="AR">Arunachal Pradesh</option>
@@ -267,9 +270,16 @@ const ShoppingCart = () => {
                   <option value="LD">Lakshadweep</option>
                   <option value="PY">Puducherry</option>
                 </select>
-                <input required name='pinCode' onChange={handleChange} maxLength={200} className='mt-1 w-full border border-t-0 border-r-0 border-l-0 
-          border-b-1 font-sans border-black text-black  text-xl border-opacity-30 p-1 outline-none' type="text" placeholder='Pin Code' />
+                <input name='stAddress' required maxLength={200} onChange={handleChange} className='w-full mt-1 border border-t-0 border-r-0 border-l-0 
+          border-b-1 font-sans border-black text-black  text-xl border-opacity-30 p-1 outline-none' type="text" placeholder='Enter Street Address' />
 
+                <input required name='pinCode' onChange={handleChange} maxLength={6} className='mt-1 w-full border border-t-0 border-r-0 border-l-0 
+          border-b-1 font-sans border-black text-black  text-xl border-opacity-30 p-1 outline-none' type="text" placeholder='Enter Pin Code' />
+                <select className='mt-1 py-2 bg-black text-white rounded' required name='vtype' onChange={handleChange}>
+                  <option value="" selected disabled hidden>Choose Vehicle Type</option>
+                  <option value="cr">Car</option>
+                  <option value="bk">Bike</option>
+                </select>
               </div>
             </div>
             {/* <div className='flex justify-between'>
@@ -302,7 +312,7 @@ const ShoppingCart = () => {
               // onClick={() => handleCheckOut()}
               style={{ backgroundColor: "#ffa500", color: "#ffffff", padding: "10px auto", margin: "10px 10px", width: "" }}
 
-              className="font-bold uppercase text-white  w-full p-3  lg:w-96 tracking-wider"
+              className="font-bold rounded uppercase text-white  w-full p-3  lg:w-96 tracking-wider"
             >
               CHECKOUT
             </button>

@@ -8,18 +8,18 @@ import { SettingDataContext } from "../../context/settingDetContext";
 import { Link } from "react-router-dom";
 
 export default function Home() {
-  const { socialMediaData } = useContext(SocialMediaContext);
-  const [data, setData] = useState({ settingData: {}, socialMediaData: {} });
-  const { settingData } = useContext(SettingDataContext);
+  // const { socialMediaData } = useContext(SocialMediaContext);
+  // const [data, setData] = useState({ settingData: {}, socialMediaData: {} });
+  // const { settingData } = useContext(SettingDataContext);
 
-  useEffect(() => {
-    if (socialMediaData && settingData) {
-      setData({ socialMediaData, settingData });
-    }
-  });
+  // useEffect(() => {
+  //   if (socialMediaData && settingData) {
+  //     setData({ socialMediaData, settingData });
+  //   }
+  // });
 
-  const getSettingData = data.settingData[0];
-  const socialMedia = data.socialMediaData;
+  // const getSettingData = data.settingData[0];
+  // const socialMedia = data.socialMediaData;
 
   return (
     <div className="homeLinear font-roboto lg:justify-start grid grid-cols-3 lg:px-12 lg:flex-row justify-center lg:text-left lg:items-center customMobflexCol lg:gap-8    customTextalign">

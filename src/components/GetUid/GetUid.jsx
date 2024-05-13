@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { OrderContext } from "../../context/OrderContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Messages from "../Message/Messages";
+import loadingGif from "../../images/loading.gif";
 
 export default function GetUid() {
   const navigate = useNavigate();
@@ -17,9 +18,6 @@ export default function GetUid() {
   } else {
     baseUrl = process.env.REACT_APP_BACKEND_LIVEAPI;
   }
-
-
-  
 
   useEffect(() => {
     setIsLoading(false);
@@ -85,7 +83,11 @@ export default function GetUid() {
   }, [userId, navigate]);
 
   if (isLoading) {
-    return <p>Loading ...</p>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <img src={loadingGif} alt="Loading" />
+      </div>
+    );
   }
 
   if (userId === null) {
