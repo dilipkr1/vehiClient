@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import Shopcart from "../Cart/ShoppingCart";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
-import pckg1Img from "../../images/pckg1.jpg";
+import pckg1Img from "../../images/pck1.png";
 import loadingGif from "../../images/loading.gif";
 
 export default function Shop() {
@@ -46,7 +46,7 @@ export default function Shop() {
   return (
     <div
       id="shopsection"
-      style={{ height: "120vh" }}
+      style={{ height: "160vh" }}
       className="container w-75 "
     >
       <div className="mt-20">
@@ -72,7 +72,7 @@ export default function Shop() {
                   // to={`/shop/${product._id}/product`}
                 >
                   <img
-                    className=" productSizeOnShop rounded-2xl   "
+                    className=" productSizeOnShop rounded-2xl"
                     // src={product.packageImg}
                     src={pckg1Img}
                     alt="shop_image"

@@ -5,6 +5,7 @@
 @media only screen and (min-width: 767px) {
   .productSizeHome {
     width: 40vw;
+    height: 350px;
   }
 }
 
@@ -13,13 +14,27 @@
   height: 350px;
 }
 
+.productSizeHome {
+  filter: brightness(130%) !important;
+}
+
 @media only screen and (max-width: 767px) {
   .docenter {
     margin: 0 auto;
     text-align: center;
     width: 100%;
   }
-  .productSizeHome {
+
+  .productSizeHome {  
     width: 310px;
+    height: 400px;
+  }
+}
+
+@media (min-width: 769px) {
+  .productSizeHome {
+    max-width: 300px;
+    height: 300px;
+    filter: brightness(50%);
   }
 }

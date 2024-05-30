@@ -17,7 +17,8 @@ export default function Messages({ userId }) {
   const [enteredCar_No, setEnteredCar_No] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const { orderData } = useContext(OrderContext);
-
+  const [text, setText] = useState("Please Enter Valid Car Number");
+  const [isValid, setIsValid] = useState(false);
   let baseUrl;
   if (process.env.NODE_ENV === "development") {
     baseUrl = process.env.REACT_APP_BACKEND_LOCALAPI;
@@ -30,6 +31,23 @@ export default function Messages({ userId }) {
       setIsLoading(false);
     }
   }, [userId, customerData, orderData]);
+ 
+
+
+  let lastFourDigits;
+
+  useEffect(() => {
+    if (lastFourDigits === enteredCar_No) {
+      setIsValid(true);
+      setText("Vehicle number is correct.")
+    } else {
+      setIsValid(false);
+      setText("Vehicle number is incorrect.")
+
+    }
+  }, [lastFourDigits, enteredCar_No]);
+
+
 
   if (!customerData || !orderData) {
     return (
@@ -38,6 +56,8 @@ export default function Messages({ userId }) {
       </div>
     );
   }
+
+
 
   const foundUserIds = orderData.cartItems.filter(
     (order) => order.userId === userId
@@ -70,7 +90,6 @@ export default function Messages({ userId }) {
   const ownerName = localStorage.getItem("ownerName");
   const carNumber = localStorage.getItem("car_No");
 
-  let lastFourDigits;
   if (carNumber) {
     lastFourDigits = carNumber.toString().slice(-4);
   }
@@ -151,7 +170,7 @@ VehiConnect`,
   };
 
   return (
-    <div className="overflow-hidden overflow-y-hidden">
+    <div className="overflow-hidden overflow-y-hidden zoom">
       <div className="conatactNavbar">
         <a href="/">
           <img className="contactLogo" src={vehicln} alt="logo_vehicCL" />
@@ -190,9 +209,8 @@ VehiConnect`,
                 <span className="checkmark"></span>
               </label>
               <label
-                className={`custom ${
-                  selectedOption === "parking" ? "active" : ""
-                }`}
+                className={`custom ${selectedOption === "parking" ? "active" : ""
+                  }`}
                 onClick={() => changeBackgroundColor("parking")}
               >
                 <i className="fa-solid fa-square-parking pr-2"></i>The car is in
@@ -206,9 +224,8 @@ VehiConnect`,
                 <span className="checkmark"></span>
               </label>
               <label
-                className={`custom ${
-                  selectedOption === "baby" ? "active" : ""
-                }`}
+                className={`custom ${selectedOption === "baby" ? "active" : ""
+                  }`}
                 onClick={() => changeBackgroundColor("baby")}
               >
                 <i className="fa-solid fa-baby pr-2"></i>There is a baby or pet
@@ -222,9 +239,8 @@ VehiConnect`,
                 <span className="checkmark"></span>
               </label>
               <label
-                className={`custom ${
-                  selectedOption === "window" ? "active" : ""
-                }`}
+                className={`custom ${selectedOption === "window" ? "active" : ""
+                  }`}
                 onClick={() => changeBackgroundColor("window")}
               >
                 <i className="fa-solid fa-window-maximize pr-2"></i>The window
@@ -252,9 +268,8 @@ VehiConnect`,
                 <span className="checkmark"></span>
               </label>
               <label
-                className={`custom ${
-                  selectedOption === "wrong" ? "active" : ""
-                }`}
+                className={`custom ${selectedOption === "wrong" ? "active" : ""
+                  }`}
                 onClick={() => changeBackgroundColor("wrong")}
               >
                 <i className="fa-solid fa-triangle-exclamation pr-2"></i>
@@ -269,27 +284,19 @@ VehiConnect`,
               </label>
             </div>
             <div className="p-3">
-              {lastFourDigits !== enteredCar_No ? (
-                <p className="text-xs text-red tracking-wide">
-                  Please Enter Valid Vehicle Number
-                </p>
-              ) : (
-                " "
-              )}
-              {lastFourDigits !== enteredCar_No ? (
-                <input
-                  onChange={(e) => setEnteredCar_No(e.target.value)}
-                  type="text"
-                  maxLength={4}
-                  placeholder="Please Enter Last 4 digits of Car"
-                  className="border-logoClr border w-80 mx-auto p-4 p m-2 text-xs text-black font-normal tracking-wide
+              <p className={`text-xs tracking-wide ${isValid ? 'text-green ' : 'text-red'}`}>
+                {text}
+              </p>
+              <input
+                onChange={(e) => setEnteredCar_No(e.target.value)}
+                type="text"
+                maxLength={4}
+                placeholder="Please Enter Last 4 digits of Car"
+                className="border-black border w-80 mx-auto p-4 p m-2 text-xs text-black font-normal tracking-wide
             "
-                />
-              ) : (
-                ""
-              )}
+              />
             </div>
-            {lastFourDigits === enteredCar_No && (
+            {isValid && (
               <div className="contactBtn text-white">
                 {isSpamMsg === "true" ? (
                   <span className="cursor-pointer btn">Can't Message</span>
@@ -305,7 +312,7 @@ VehiConnect`,
                   ) : (
                     <a
                       onClick={handleCall}
-                      href={`tel:01205136386,${temperoryKey}`}
+                      href={`tel:01205136511,${temperoryKey}`}
                     >
                       Call Now
                     </a>

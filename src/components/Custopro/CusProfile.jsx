@@ -15,6 +15,10 @@ export default function CusProfile() {
   // const [loading, setloading] = useState(true);
   const [activeTab, setActiveTab] = useState("tab1");
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   if (!isAuthenticated) {
     navigate("/login");
   }
@@ -37,7 +41,7 @@ export default function CusProfile() {
       className="my-20 pt-20  gap-1 flex flex-col "
     >
       <div className="flex flex-col h-screen ">
-        <div className="bg-logoClr  flex justify-center items-center gap-14 p-3 font-bold text-xl">
+        <div className="bg-logoClr  flex justify-center items-center lg:gap-14 p-3 font-bold text-xl">
           <button
             className={`tab-button ${
               activeTab === "tab1" ? "active" : ""

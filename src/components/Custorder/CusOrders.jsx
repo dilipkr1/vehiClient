@@ -151,7 +151,7 @@ export default function CusOrders() {
               <h1 className="font-bold">Add Emergency Contact:</h1>
               <input
                 required
-                className="w-full px-2 py-1 bg-gray-100 rounded mt-2"
+                className="w-full px-2 py-1 bg-gray-100 rounded border mt-2"
                 type="tel"
                 id="phone1"
                 name="phone1"
@@ -163,7 +163,7 @@ export default function CusOrders() {
               />
               <input
                 required
-                className="w-full px-2 py-1 bg-gray-100 rounded mt-0"
+                className="w-full px-2 py-1 bg-gray-100 border mt-1 rounded "
                 type="tel"
                 id="phone2"
                 name="phone2"

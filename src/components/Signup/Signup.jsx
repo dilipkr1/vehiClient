@@ -19,6 +19,10 @@ function Signup() {
   const [errorMessage, setErrorMessage] = useState(null);
   const [errorMessageOtp, setErrorMessageOtp] = useState(null);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   let baseUrl;
   if (process.env.NODE_ENV === "development") {
     baseUrl = process.env.REACT_APP_BACKEND_LOCALAPI;

@@ -18,6 +18,7 @@ export default function GetUid() {
   } else {
     baseUrl = process.env.REACT_APP_BACKEND_LIVEAPI;
   }
+  console.log(uid.toLocaleLowerCase());
 
   useEffect(() => {
     setIsLoading(false);
@@ -30,7 +31,7 @@ export default function GetUid() {
       .flat();
 
     const getUid = getProduct.find((product) => {
-      if (product.uid.toLowerCase() === uid) {
+      if (product.uid.toLowerCase() === uid.toLocaleLowerCase()) {
         return true;
       }
       return false;

@@ -70,10 +70,13 @@ export default function Navbar() {
         ) : (
           <>
             <Link to="/profile">
-              <i className="fa-solid fa-user text-black text-2xl mr-1 px-1 faSize"></i>
+              <span className="text-xl sbn">
+                <i className="fa-solid fa-user text-white text-2xl mr-1 px-1 faSize tracking-wider"></i>
+                profile
+              </span>
             </Link>
             <button
-              className="text-xl font-roboto text-main-700 tracking-wide"
+              className="text-sm hideonsmSize  font-roboto text-main-700 tracking-wide"
               onClick={handleLogout}
             >
               LogOut
@@ -134,7 +137,7 @@ export default function Navbar() {
                   </li>
                   {isAuthenticated && (
                     <button
-                      className="relative tex-xl mt-3 font-roboto text-white tracking-wide"
+                      className="relative tex-xl underline mt-3 font-roboto text-white tracking-widest"
                       onClick={handleLogout}
                     >
                       LogOut

@@ -71,7 +71,8 @@ module.exports = {
       'bgnavclr':'#446bb9',
       'inputbgclr':'#f5f5f7',
       'logoClr':'#f68712',
-      'btnBgClr':"#6624D1"
+      'btnBgClr':"#6624D1",
+      'green':"#008000",
  
     }
   },

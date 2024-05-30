@@ -61,8 +61,8 @@ export default function () {
           </ul>
           {/* </div> */}
         </div>
-        <div className="navItem flex flex-col ">
-          <ul className="flex MobViewRow flex-col gap-4 mobp">
+        <div className="navItem flex justify-start my-2 gap-2">
+          <ul className="flex  flex-col gap-4 mobp">
             <li>
               <a href="/shop">Shop</a>
             </li>
@@ -72,14 +72,16 @@ export default function () {
             <li>
               <a href="/about">About Us</a>
             </li>{" "}
+          </ul>
+          <ul className="flex  flex-col gap-4 mobp">
+            <li>
+              <a href="/privacy">Privcy & Policy</a>
+            </li>
             <li>
               <a href="/refund">Refund-Policy</a>
             </li>
             <li>
               <a href="/terms">Terms & condtions</a>
-            </li>
-            <li>
-              <a href="/privacy">Privcy & Policy</a>
             </li>
           </ul>
         </div>
@@ -102,7 +104,7 @@ export default function () {
       {/* </div> */}
       <hr className="mt-4" />
       <div className="flex justify-between lg:px-20 MobView mobPadd">
-        <div className="copyRight flex gap-4 mt-2 pl-32">
+        <div className="copyRight flex gap-4 mt-2 lg:pl-32">
           <button className="flex bg-white hover:bg-pricingcard text-main-700 font-semibold   py-2 lg:px-4 px-3 border border-blue-50 hover:border-transparent rounded">
             <a href={socialMedia?.android}>
               <svg

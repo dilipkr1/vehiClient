@@ -1,4 +1,4 @@
-@media (min-width: 200px) and (max-width: 640px) {
+@media only screen and (max-width: 767px) {
   .onDesktopOnly {
     display: none;
   }
@@ -19,8 +19,9 @@
   }
 
   .productSizeOnShop {
-    max-width: 300px;
-    max-height: 180px;
+    min-width: 300px;
+    max-width: 310px;
+    max-height: 250px;
     border-radius: 8px;
   }
 
@@ -49,4 +50,15 @@
   .onDesktopOnly {
     display: block;
   }
+  .productSizeOnShop {
+    min-width: 300px;
+    max-width: 310px;
+    max-height: 300px;
+    border-radius: 8px;
+  }
+}
+
+
+.productSizeOnShop {
+  filter: brightness(130%) !important;
 }

@@ -1,3 +1,4 @@
+
 import React, { useContext, useEffect, useState } from 'react';
 import { CartContext } from '../../context/cartContext';
 import Button from '@mui/material/Button';
@@ -36,7 +37,7 @@ const ShoppingCart = () => {
   } else {
     baseUrl = process.env.REACT_APP_BACKEND_LIVEAPI;
   }
- 
+
 
   useEffect(() => {
     if (cartItems.length > 1 || cartItems.some(item => item.quantity > 1)) {
@@ -175,7 +176,7 @@ const ShoppingCart = () => {
   }
 
   return (
-    <div className="lg:w-full border-l bg-white border-opacity-20 border-black rounded-2xl p-2">
+    <div   className="lg:w-full  border-l bg-white border-opacity-20 border-black rounded-2xl p-2">
       <div className="lg:w-full   rounded-xl">
         {/* <span className='pl-2 m-0 text-2xl text-black font-bold   tracking-wider font-sans'>Your Cart</span> */}
 

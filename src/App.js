@@ -27,15 +27,16 @@ import Points from "./components/Points/Points";
 import Trusted from "./components/Trusted/Trusted";
 import Razpay from './components/Razorpay/Razpay'
 import { AuthContext } from "./context/AuthContext";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import Activate from "./components/Activate/Activate";
 import Terms from "./components/TermsAnd Privacty/Terms";
 import Privacy from "./components/TermsAnd Privacty/Privacy";
 import Refund from "./components/TermsAnd Privacty/Refund";
 
-function App() {
-  const { state, isAuthenticated } = useContext(AuthContext);
-
+function App() { 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
 
     <div className="App" >

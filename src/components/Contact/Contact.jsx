@@ -10,11 +10,15 @@ function Contact() {
   const { settingData } = useContext(SettingDataContext);
   const [sentMessage, setSentMessage] = useState(false);
   const [formData, setFormData] = useState({
-    ctName: "YourName",
-    ctEmail: "example@gmail.com",
-    ctPhone: "Your Mobile Number",
-    ctMessage: "Your Message",
+    ctName: "",
+    ctEmail: "",
+    ctPhone: " ",
+    ctMessage: " ",
   });
+
+    useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   let baseUrl;
   if (process.env.NODE_ENV === "development") {
@@ -37,12 +41,14 @@ function Contact() {
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
-    })); 
+    }));
+
+    console.log("Customer Details", formData);
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); 
-    const url = `${baseUrl}/create-user-query`; 
+    e.preventDefault();
+    const url = `${baseUrl}/create-user-query`;
     try {
       const response = await axios.post(url, {
         ...formData,
@@ -143,7 +149,6 @@ function Contact() {
             </ul>
           </div>
         </div>
- 
 
         <div className="flex shadow-2xl shadow-logoClr flex-col letsConnect bg-white mt-5 lg:p-8 p-2 lg:ml-20 rounded-2xl lg:w-100">
           <h5 className="text-4xl font-black   text-main">Lets Connect</h5>

@@ -105,6 +105,16 @@ export default function Workdetails() {
           </p>
         </div>
       </div>
+      <div class="video-container">
+        <iframe
+          src="https://www.youtube.com/embed/MQvwi2gUsuc?si=u9R-CL_2439_s3Qp"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen
+        ></iframe>
+      </div>
     </div>
   );
 }

@@ -7,10 +7,30 @@
     display: none;
   }
 
+  .hideonsmSize {
+    display: none;
+  }
+
   .faSize {
-    font-size: 30px;
+    font-size: 20px;
     font-weight: 600;
   }
+}
+
+.sbn {
+  color: white;
+  height: 42px;
+  line-height: 42px;
+  padding: 10px 24px;
+  font-weight: 600;
+  font-size: 15px;
+  text-align: center;
+  letter-spacing: -0.02em;
+  z-index: 1;
+  transition: 0.5s;
+  background: linear-gradient(180deg, #f68712 -23%, #f68121);
+  box-shadow: 0 2px 3px rgba(3, 22, 3, 0.2);
+  border-radius: 10px;
 }
 
 .signup-Btn {
@@ -39,6 +59,4 @@
   .authDesk {
     display: block;
   }
-
- 
 }

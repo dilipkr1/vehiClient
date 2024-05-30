@@ -55,7 +55,6 @@ export default function Login() {
   } else {
     baseUrl = process.env.REACT_APP_BACKEND_LIVEAPI;
   }
-
   const [error, setError] = useState(null);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [forgot, setForgot] = useState(null);
@@ -64,6 +63,11 @@ export default function Login() {
   const [sendText, setSendText] = useState(true);
   const [newPasswrod, setNewPassword] = useState(false);
   const [success, setSuccess] = useState(null);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };

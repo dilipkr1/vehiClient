@@ -16,11 +16,6 @@ function Ourservices() {
             The service we offer is specifically designed to meet your needs.
           </h3>
         </div>
-        {/* <div style={{ Width: "700px", textAlign: "center", margin: "0 auto" }}>
-          <h3 className=" lg:text-3xl text-pgcolor  text-3xl tracking-wider   font-700 font-extrabold">
-           
-          </h3>
-        </div> */}
       </div>
       <div class="container mt-10   overflow-x-hidden">
         <div class="grid grid-cols-2 flexColMob">
@@ -35,7 +30,7 @@ function Ourservices() {
               <span className="textwidthOnMob ">
                 Your contact details will not be shared, but anyone who has any
                 issue with your parked vehicle can contact you. We will send you
-                 SMS and Masked call..
+                SMS and Masked call..
               </span>
               <div className="title my-2 ">
                 <div className="lists flex flex-col">
