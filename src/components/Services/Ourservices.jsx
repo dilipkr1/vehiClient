@@ -25,7 +25,7 @@ function Ourservices() {
           <div class="flex justify-start items-center textWithServ px-5">
             <div className="heading gap-3 pl-">
               <h3 className=" text-pgcolor textwidthOnMob text-2xl uppercase font-sans font-bold">
-                Car / Bike Parking tag
+                vehicle <span className="lowercase">(Car / Bike)</span> Parking tag
               </h3>
               <span className="textwidthOnMob ">
                 Your contact details will not be shared, but anyone who has any

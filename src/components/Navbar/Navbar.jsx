@@ -60,7 +60,7 @@ export default function Navbar() {
               <Link to="/login">Login</Link>
             </span>
             <span className="mx-2">
-              <Link to="/signup">
+              <Link to="/login">
                 <button type="button" class="signup-Btn">
                   Sign Up
                 </button>
@@ -101,7 +101,7 @@ export default function Navbar() {
                   className="gap-3  px-8 text-xl customNavResponsive2 flex flex-col   bg-black text-white "
                 >
                   <span
-                    className="mt-2 py-3 px-4 absolute top-0 text-black bg-white font-bold text-4xl right-5"
+                    className="mt-2 py-3 px-4 absolute top-0 text-white hover:bg-white hover:text-black font-bold text-4xl right-5"
                     onClick={() => setNav(null)}
                   >
                     X
@@ -116,25 +116,31 @@ export default function Navbar() {
                         </Link>
                       </li>
                       <li onClick={() => setNav(null)}>
-                        <Link to="/signup">
+                        <Link to="/login">
                           <button className="signup-Btn ">SignUp</button>
                         </Link>
                       </li>
                     </div>
                   )}
-                  <li onClick={() => setNav(null)}>
-                    <Link to="/">Home</Link>
-                  </li>
-                  <li onClick={() => setNav(null)}>
-                    <Link to="/shop">Shop</Link>
-                  </li>
-
-                  <li onClick={() => setNav(null)}>
-                    <Link to="/contact">Contact</Link>
-                  </li>
-                  <li onClick={() => setNav(null)}>
-                    <Link to="/about">About Us</Link>
-                  </li>
+                  <Link className="py-1" to="/">
+                    <li onClick={() => setNav(null)}>
+                      Home
+                    </li>
+                  </Link>
+                  <Link className="py-1" to="/shop">
+                    <li onClick={() => setNav(null)}>
+                      Shop
+                    </li>
+                  </Link>
+                  <Link className="py-1" to="/contact">
+                    <li onClick={() => setNav(null)}>
+                      Contact
+                    </li></Link>
+                  <Link className="py-1" to="/about">
+                    <li onClick={() => setNav(null)}>
+                      About Us
+                    </li>
+                  </Link>
                   {isAuthenticated && (
                     <button
                       className="relative tex-xl underline mt-3 font-roboto text-white tracking-widest"

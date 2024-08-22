@@ -73,6 +73,7 @@ module.exports = {
       'logoClr':'#f68712',
       'btnBgClr':"#6624D1",
       'green':"#008000",
+      'faqBorder': '#e5e7eb'
  
     }
   },

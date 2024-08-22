@@ -1,198 +1,351 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { CustomerContext } from "../../context/customrContext";
-import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
+import { Dialog, DialogContent, TextField, Button } from "@mui/material";
+import { OrderContext } from "../../context/OrderContext";
+import Swal from 'sweetalert2';
 
 const Activate = () => {
-  const [formData, setFormData] = useState({
-    phone: "",
-  });
-  const [errorMessageOtp, setErrorMessageOtp] = useState(null);
-  const [getOtp, setGetOtp] = useState(false);
   const { customerData } = useContext(CustomerContext);
-  const [isLoading, setIsLoading] = useState(true);
+  const { setIsAuthenticated, isAuthenticated, state } = useContext(AuthContext);
+  const [text, setText] = useState('');
+  const [code, setCode] = useState('');
+  const [open, setOpen] = useState(true);
+  const [isValid, setIsValid] = useState(false);
+  const [orderId, setOrderId] = useState(null);
+  const [showDetails, setShowDetails] = useState(false);
+  const [referralCode, setReferralCode] = useState('');
+  const location = useLocation();
   const navigate = useNavigate();
-  const [text, setText] = useState(false);
+  const { orderData, qrCodeData } = useContext(OrderContext);
+  const { Orders, user } = state;
+
+  const [loading, setIsLoading] = useState(true);
+  const [vehicleNo, setVehicleNo] = useState('');
+
+  const handleChange = (event) => {
+    const value = event.target.value.toUpperCase();
+    if (value.length <= 10) {
+      setVehicleNo(value);
+    }
+  };
+  const baseUrl = process.env.NODE_ENV === "development"
+    ? process.env.REACT_APP_BACKEND_LOCALAPI
+    : process.env.REACT_APP_BACKEND_LIVEAPI;
+
+  const uid = localStorage.getItem("uid");
+
   useEffect(() => {
-    setIsLoading(false);
-  }, [customerData]);
-
-  if (!customerData || customerData.length === 0) {
-    return;
-  }
-
-  let baseUrl;
-  if (process.env.NODE_ENV === "development") {
-    baseUrl = process.env.REACT_APP_BACKEND_LOCALAPI;
-  } else {
-    baseUrl = process.env.REACT_APP_BACKEND_LIVEAPI;
-  }
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const customer = customerData.find(
-    (customer) => customer.mobileNumber === formData.phone
-  );
-
-  const handleSendBtn = async () => {
-    if (formData.phone.length === 10) {
-      await handleSendOtp();
-    } else {
-      setErrorMessageOtp("please enter you number!");
-      return;
+    if (!isAuthenticated) {
+      const redirectTo = '/activation';
+      navigate(`/login?redirect=${encodeURIComponent(redirectTo)}`);
     }
-  };
+  }, [isAuthenticated, navigate, location]);
 
-  const handleSendOtp = async () => {
-    if (formData.phone.length !== 10) {
-      setErrorMessageOtp("Please enter a valid 10-digit phone number!");
-      return;
-    }
+  useEffect(() => {
+    if (Orders && qrCodeData && user) {
+      setIsLoading(false);
 
-    try {
-      const url = `${baseUrl}/auth/sendOtpActivation`;
-      const response = await axios.post(url, {
-        mobileNumber: formData.phone,
-      });
+      const isOrderExists = qrCodeData?.find((qrcode) =>
+        Orders?.some((order) => order.orderId === qrcode.orderId && qrcode.qrStatus === false && qrcode.qrOrderStatus === true)
+      );
+      console.log("isOrderExists", isOrderExists);
 
-      if (response.status === 200) {
-        setGetOtp(true);
-        console.log("Successfully sent OTP");
-      }
-    } catch (error) {
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
-        setErrorMessageOtp(error.response.data.message);
+      if (isOrderExists) {
+        setOrderId(isOrderExists.orderId);
       } else {
-        setErrorMessageOtp("Failed to send OTP. Please try again.");
+        console.log("order does not exist");
       }
+    }
+  }, [Orders, qrCodeData, user]);
+
+  const handleVtCode = async () => {
+    if (code === '123456' && orderId) {
+      console.log("order --- id", orderId)
+      await handleServerUpdate(orderId);
+
+    }
+    else if (code === '123456') {
+      setIsValid(true);
+      setShowDetails(true);
+      setText('VTCODE Verified. Please enter your details.');
+
+      // Success alert with SweetAlert2
+      await Swal.fire({
+        title: 'Success',
+        text: 'VTCODE Verified. Please enter your details.',
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK'
+      });
+    } else {
+      setIsValid(false);
+      setText('Please Enter Valid Code');
+      await Swal.fire({
+        title: 'Invalid',
+        text: 'Please Enter Valid Code',
+        icon: 'error',
+        confirmButtonColor: '#d33',
+        confirmButtonText: 'Ok'
+      });
+      setText('');
     }
   };
 
-  const orderId = localStorage.getItem("orderId");
-  const userId = localStorage.getItem("userId");
-
-  const handleQrStatus = async () => {
+  const handleServerUpdate = async (orderId) => {
     try {
-      const response = await axios.post(`${baseUrl}/orders/qrstatus`, {
+      const response = await axios.put(`${baseUrl}/qrstatus`, {
         orderId: orderId,
+        uid: uid,
         qrStatus: true,
       });
 
       if (response.status === 200) {
-        setText(true);
-
-        setTimeout(() => {
-          setText(false);
-        }, 3000);
-
-        console.log("qrstatus updated");
+        Swal.fire({
+          title: 'Activated Successfully',
+          text: 'Redirecting...',
+          icon: 'success',
+          timer: 3000,
+          showConfirmButton: false,
+        }).then(() => {
+          navigate(`/profile/${uid}`, { replace: true });
+          window.location.reload();
+        });
+        console.log("status updated");
       } else {
-        console.error("Failed to update QR status");
+        Swal.fire({
+          title: 'Failed to Activate Try Again',
+          text: 'Please try again.',
+          icon: 'error',
+        });
       }
     } catch (error) {
       console.error("Error updating QR status:", error);
+      Swal.fire({
+        title: 'Error',
+        text: error.response?.data?.message || "Something went wrong.",
+        icon: 'error',
+      });
     }
   };
 
-  const handleVerifyOtp = async () => {
-    try {
-      const url = `${baseUrl}/auth/verify-otp`;
-      const response = await axios.post(url, {
-        mobileNumber: formData.phone,
-        userId: userId,
-        enteredOtp: formData.enteredOtp,
+  const generateOrderId = () => {
+    const currentDate = new Date();
+    const formattedDate = currentDate.toISOString().slice(5, 10).replace(/-/g, '');
+    const randomDigits = Math.floor(1000 + Math.random() * 9000);
+    const orderId = formattedDate + String(randomDigits).padStart(4, '0');
+    return orderId;
+  };
+
+  const getuserId = user?._id;
+  console.log("userdata", getuserId);
+
+  const handleSubmitDetails = () => {
+    const fullName = document.querySelector("input[name='fullName']").value.trim();
+    const email = document.querySelector("input[name='email']").value.trim();
+    const phone = document.querySelector("input[name='phone']").value.trim();
+    const vehicleType = document.querySelector("select[name='vehicleType']").value;
+    const vehicleNo = document.querySelector("input[name='vehicleNo']").value.trim();
+
+    if (!fullName) {
+      Swal.fire({
+        // title: 'Validation Error',
+        text: 'Please enter your full name.',
+        icon: 'error',
       });
-      if (response.status === 200) {
-        localStorage.removeItem("userId");
-        localStorage.removeItem("orderId");
-        console.log("successfully verified");
-        await handleQrStatus();
-        navigate("/");
+      return;
+    }
+    if (!email) {
+      Swal.fire({
+        // title: 'Validation Error',
+        text: 'Please enter your email.',
+        icon: 'error',
+      });
+      return;
+    }
+    if (!phone) {
+      Swal.fire({
+        // title: 'Validation Error',
+        text: 'Please enter your phone number.',
+        icon: 'error',
+      });
+      return;
+    }
+    if (!vehicleType) {
+      Swal.fire({
+        // title: 'Validation Error',
+        text: 'Please select your vehicle type.',
+        icon: 'error',
+      });
+      return;
+    }
+    if (!vehicleNo) {
+      Swal.fire({
+        // title: 'Validation Error',
+        text: 'Please enter your vehicle number.',
+        icon: 'error',
+      });
+      return;
+    }
+
+    // Determine the prefix based on the vehicle type
+    let prefix = '';
+    if (vehicleType === 'car') {
+      prefix = 'C';
+    } else if (vehicleType === 'bike') {
+      prefix = 'B';
+    }
+    const prefixedVehicleNo = `${prefix}-${vehicleNo}`;
+
+    const formData = {
+      fullName,
+      email,
+      phone,
+      vehicleNo: prefixedVehicleNo,
+      orderId: generateOrderId(),
+      userId: getuserId,
+      paymentStatus: 'Success',
+      orderStatus: 'Order Received',
+      qrStatus: true,
+      uid: uid
+    };
+
+    if (referralCode) {
+      formData.referralCode = referralCode;
+    }
+
+    console.log("formdata", formData);
+    handlePlaceOrderwithAct(formData);
+  };
+
+  const handlePlaceOrderwithAct = async (orderData) => {
+    try {
+      const response = await axios.post(`${baseUrl}/place-order`, orderData);
+
+      if (response.status === 201) {
+        Swal.fire({
+          title: 'Activated Successfully',
+          text: 'Redirecting...',
+          icon: 'success',
+          timer: 3000,
+          showConfirmButton: false,
+        }).then(() => {
+          navigate(`/profile/${uid}`, { replace: true });
+          window.location.reload();
+        });
+      } else {
+        Swal.fire({
+          title: 'Failed to Place Order',
+          text: 'Please try again.',
+          icon: 'error',
+        });
       }
     } catch (error) {
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
-        setErrorMessageOtp(error.response.data.message);
-      } else {
-        setErrorMessageOtp("Failed to verify OTP. Please try again.");
-      }
+      console.error("Error placing order:", error);
+      Swal.fire({
+        title: 'Error',
+        text: error.response?.data?.message || "Something went wrong.",
+        icon: 'error',
+      });
     }
-  }; 
-  
-  return (
-    <div className=" mt-20 py-10 px-5">
-      <div className="flex flex-col justify-center items-center">
-        <div class="mb-4">
-          <h3 className="text-xl font-bold tracking-wider  font-sans my-5">
-            Scanner Activation
-          </h3>
-          <div className="continue">
-            {errorMessageOtp && (
-              <p className="text-red text-xs font-sans ">{errorMessageOtp}</p>
-            )}
-          </div>
-          {/*    <label class="block text-gray-700 font-bold mb-2" for="phone">
-            Phone Number
-             </label> */}
-          {!getOtp && (
-            <div className="flex  justify-center items-center">
-              <input
-                class="shadow mr-2 appearance-none border  rounded w-full py-2 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="phone"
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                maxLength="10"
-                oninput="this.value = this.value.slice(0, 10)"
-                placeholder="Enter your phone number"
-                required
-              />
+  };
 
-              <button
-                type="button"
-                onClick={() => handleSendBtn()}
-                className="flex px-4 text-xs items-center justify-center flex-none  py-2 md:px-2 md:py-2 border-2 rounded-lg font-medium border-black bg-black text-white"
+  return (
+    <div style={{ height: "150vh", position: 'relative' }}>
+      <Dialog
+        open={open}
+        onClose={() => setOpen(true)}
+        aria-labelledby="activation-dialog-title"
+        aria-describedby="activation-dialog-description"
+        style={{ zIndex: 1 }} // Ensure the dialog has a lower z-index than SweetAlert2
+      >
+        <DialogContent>
+          {!showDetails ? (
+            <div className="">
+              <TextField
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                label="Enter VTCODE"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                autoFocus
+              />
+              {text && (
+                <p className={`text-xs tracking-wide ${isValid ? 'text-green' : 'text-red'}`}>
+                  {text}
+                </p>
+              )}
+              <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                <Button
+                  variant="contained"
+                  onClick={handleVtCode}
+                  style={{ backgroundColor: 'orange', color: 'white' }}
+                >
+                  Activate Now
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <TextField
+                name="fullName"
+                type="text"
+                required
+                fullWidth
+                label="Full Name"
+                variant="outlined"
+              />
+              <TextField
+                name="email"
+                required
+                fullWidth
+                type="email"
+                label="Email Address"
+                variant="outlined"
+              />
+              <TextField
+                name="phone"
+                required
+                fullWidth
+                label="Phone Number"
+                variant="outlined"
+                inputProps={{ maxLength: 10 }}
+              />
+              <select
+                name="vehicleType"
+                className="w-full border rounded-sm border-[#d1d1d1] p-2 outline-none my-2"
+                defaultValue=""
               >
-                Send
-              </button>
+                <option value="" disabled>Select Vehicle Type</option>
+                <option value="car">Car</option>
+                <option value="bike">Bike</option>
+              </select>
+              <TextField
+                name="vehicleNo"
+                required
+                style={{ textTransform: 'uppercase' }}
+                fullWidth
+                label="Vehicle Number"
+                variant="outlined"
+                value={vehicleNo}
+                onChange={handleChange}
+              />
+              <div className="mt-4">
+                <Button
+                  onClick={handleSubmitDetails}
+                  variant="contained"
+                  style={{ backgroundColor: 'orange', color: 'white' }}
+                >
+                  Submit
+                </Button>
+              </div>
             </div>
           )}
-        </div>
-
-        {getOtp && (
-          <div>
-            <div className="flex  justify-center items-center">
-              <input
-                type="text"
-                name="enteredOtp"
-                value={formData.enteredOtp}
-                onChange={handleChange}
-                placeholder="otp"
-                maxLength="6"
-                class="flex mr-2 w-full text-xs py-2 px-2 border-2 border-black rounded-lg font-medium placeholder:font-normal"
-              />
-              {text && <p style={{ color: "greenF" }}>{text}</p>}
-              <button
-                type="button"
-                onClick={handleVerifyOtp}
-                class="flex items-center text-xs   justify-center flex-none px-4 py-2 md:px-4 md:py-3 border-2 rounded-lg  border-black bg-black text-white"
-              >
-                Verify
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

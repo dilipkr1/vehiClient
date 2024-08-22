@@ -1,22 +1,21 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import SaveAsIcon from "@mui/icons-material/SaveAs";
 import axios from "axios";
-import { Switch } from "@mui/material";
+import { Switch, Card, CardContent, Typography, Button, Select, MenuItem } from "@mui/material";
+import Swal from 'sweetalert2';
 import { OrderContext } from "../../context/OrderContext";
 
 const Cusconfig = () => {
   const navigate = useNavigate();
   const { state } = useContext(AuthContext);
-  const { Orders, user } = state;
-
+  const { Orders } = state;
   const { orderData } = useContext(OrderContext);
+
   const [errorMessage, setErrorMessage] = useState(null);
   const [isSpamPhone, setIsSpamPhone] = useState(false);
   const [ispamMsg, setispamMsg] = useState(false);
-  const [showMessage, setShowMessage] = useState(false);
-  const [orderId, setOrderId] = useState(null);
+  const [orderId, setOrderId] = useState("");
 
   let baseUrl;
   if (process.env.NODE_ENV === "development") {
@@ -26,33 +25,28 @@ const Cusconfig = () => {
   }
 
   const handleClickCall = (e) => {
-    const newValue = e.target.checked;
-    setIsSpamPhone(newValue);
+    setIsSpamPhone(e.target.checked);
   };
-  const handleClickMesg = (e) => {
-    const newValue = e.target.checked;
-    setispamMsg(newValue);
-   };
 
-  if (!Orders || Orders.length === 0) {
-    return (
-      <div className="flex flex-col m-5 p-3   mt-20 pt-20  justify-center items-center">
-        <p className="text-logoClr font-extrabold text-2xl font-sans  rounded-sm">
-          You Don't have any order ?
-        </p>
-        <img
-          className="w-30 "
-          loading="lazy"
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXgY2__KniuYieXzn6koGTAV9WsIxplMSHTfkMwIf1sde7bnxYId7NPpfcecK5iknrj1E&usqp=CAU"
-        />
-      </div>
-    );
-  }
+  const handleClickMesg = (e) => {
+    setispamMsg(e.target.checked);
+  };
 
   const handleSubmit = async () => {
+    if (!orderId) {
+      Swal.fire({
+        title: 'Warning!',
+        text: 'Please select a vehicle number before updating.',
+        icon: 'warning',
+        showConfirmButton: true,
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+
     try {
       const response = await axios.put(
-        `${baseUrl}/contacts/update-callingsts`,
+        `${baseUrl}/update-callingsts`,
         {
           orderId: orderId,
           isAllowedMsg: ispamMsg,
@@ -66,76 +60,111 @@ const Cusconfig = () => {
       );
 
       if (response.status === 200) {
-        setShowMessage(true);
-        setTimeout(() => {
-          setShowMessage(false);
-        }, 3000);
+        Swal.fire({
+          title: 'Success!',
+          text: 'Updated Successfully',
+          icon: 'success',
+          showConfirmButton: true,
+          confirmButtonText: 'OK',
+        });
       } else {
-        console.error("Failed to update Spamming Status");
+        Swal.fire({
+          title: 'Error!',
+          text: 'Failed to update Spamming Status',
+          icon: 'error',
+          showConfirmButton: true,
+          confirmButtonText: 'OK',
+        });
       }
     } catch (error) {
-      console.error("Error updating Spamming Status:", error.message);
-      throw new Error(
-        "An unexpected error occurred while updating Spamming Status"
-      );
+      Swal.fire({
+        title: 'Error!',
+        text: 'An unexpected error occurred while updating Spamming Status',
+        icon: 'error',
+        showConfirmButton: true,
+        confirmButtonText: 'OK',
+      });
     }
   };
-  return (
-    <div>
-      <div className="flex mt-10 flex-col gap-8 justify-center items-center">
-        <div className="OrderOptioins">
-          <select
-            className=" border-none bg-logoClr text-white font-sans tracking-wide rounded-2xl p-2 px-4"
-            onChange={(e) => setOrderId(e.target.value)}
-            // onclick = {}
-          >
-            <option className="font-bold " value="">
-              Choose Your Vehicle Number
-            </option>
-            {Orders.map((order, index) => (
-              <option key={index} value={order.cartItems[0].orderId}>
-                {order.cartItems[0].car_No}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="flex">
-          Disable Spam Call
-          <Switch
-            name="isAllowedPhone"
-            onClick={handleClickCall}
-            // onChange={handleChangePhoneCall}
-            checked={isSpamPhone}
-            disabled={false}
+
+  if (!Orders || Orders.length === 0) {
+    return (
+      <Card variant="outlined" style={{ maxWidth: 600, margin: 'auto', padding: '16px' }}>
+        <CardContent style={{ textAlign: 'center' }}>
+          <Typography variant="h5" gutterBottom>
+            You Don't have any orders
+          </Typography>
+          <img
+            className="w-30"
+            loading="lazy"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXgY2__KniuYieXzn6koGTAV9WsIxplMSHTfkMwIf1sde7bnxYId7NPpfcecK5iknrj1E&usqp=CAU"
+            alt="No Orders"
           />
-        </div>
-        <div className="flex">
-          Disable Spam Messge
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <Card variant="outlined" style={{ maxWidth: 600, margin: 'auto', padding: '16px' }}>
+      <CardContent>
+        <Typography variant="h6" gutterBottom>
+          Configure Order Settings
+        </Typography>
+        <Select
+          fullWidth
+          value={orderId || ""}
+          onChange={(e) => setOrderId(e.target.value)}
+          variant="outlined"
+          style={{ marginBottom: '16px' }}
+          displayEmpty
+          renderValue={(selected) => {
+            if (selected === "") {
+              return (
+                <em>Choose Your Vehicle Number</em>
+              );
+            }
+            return selected;
+          }}
+        >
+          <MenuItem value="" disabled>
+            <em>Choose Your Vehicle Number</em>
+          </MenuItem>
+          {Orders.map((order) => (
+            <MenuItem style={{ textTransform: "uppercase" }} key={order._id} value={order.orderId}>
+              {order.vehicleNo}
+            </MenuItem>
+          ))}
+        </Select>
+
+
+        <div style={{ marginBottom: '16px' }}>
+          <Typography variant="body1">Disable Spam Call</Typography>
           <Switch
-            name="isAllowedMsg"
-            onClick={handleClickMesg}
-            // onChange={handleChangeMessage}
-            checked={ispamMsg}
-            disabled={false}
+            checked={isSpamPhone}
+            onChange={handleClickCall}
           />
         </div>
 
-        <div className="flex justify-between">
-          <button
+        <div style={{ marginBottom: '16px' }}>
+          <Typography variant="body1">Disable Spam Message</Typography>
+          <Switch
+            checked={ispamMsg}
+            onChange={handleClickMesg}
+          />
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Button
+            variant="contained"
+            style={{ backgroundColor: '#F68418' }}
             onClick={handleSubmit}
-            className=" bg-logoClr text-sm p-2 px-3 rounded"
           >
             UPDATE
-          </button>
-          {showMessage && (
-            <p className="ml-5 text-main text-xs font-bold">
-              Updated Successfully
-            </p>
-          )}
+          </Button>
         </div>
-        {errorMessage && <p>{errorMessage}</p>}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 

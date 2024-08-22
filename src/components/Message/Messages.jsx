@@ -7,6 +7,7 @@ import { CustomerContext } from "../../context/customrContext";
 import { Input } from "@mui/material";
 import { OrderContext } from "../../context/OrderContext";
 import loadingGif from "../../images/loading.gif";
+import Swal from 'sweetalert2';
 
 export default function Messages({ userId }) {
   const navigate = useNavigate();
@@ -26,13 +27,6 @@ export default function Messages({ userId }) {
     baseUrl = process.env.REACT_APP_BACKEND_LIVEAPI;
   }
 
-  useEffect(() => {
-    if (userId && customerData && orderData) {
-      setIsLoading(false);
-    }
-  }, [userId, customerData, orderData]);
- 
-
 
   let lastFourDigits;
 
@@ -48,53 +42,17 @@ export default function Messages({ userId }) {
   }, [lastFourDigits, enteredCar_No]);
 
 
-
-  if (!customerData || !orderData) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <img src={loadingGif} alt="Loading" />
-      </div>
-    );
-  }
-
-
-
-  const foundUserIds = orderData.cartItems.filter(
-    (order) => order.userId === userId
-  );
-  foundUserIds.forEach((order) => {
-    localStorage.setItem("phone1", order.cartItems[0].phone1);
-    localStorage.setItem("phone2", order.cartItems[0].phone2);
-    localStorage.setItem("car_No", order.cartItems[0].car_No);
-  });
-
-  const phone1 = localStorage.getItem("phone1");
-  const phone2 = localStorage.getItem("phone2");
-
-  // }
-  const foundCustomer = customerData.find(
-    (customer) => customer.userId === userId
-  );
-
-  if (foundCustomer) {
-    const ownerPhoneNum = foundCustomer.customerPhone;
-    localStorage.setItem("ownerPhoneNum", ownerPhoneNum);
-    localStorage.setItem("ownerName", foundCustomer.customerName);
-    localStorage.setItem("isAllowedPhone", foundCustomer.isAllowedPhone);
-    localStorage.setItem("isAllowedMsg", foundCustomer.isAllowedMsg);
-  }
-
   const isSpamMsg = localStorage.getItem("isAllowedMsg");
   const isSpamCall = localStorage.getItem("isAllowedPhone");
   const ownerPhoneNum = localStorage.getItem("ownerPhoneNum");
   const ownerName = localStorage.getItem("ownerName");
-  const carNumber = localStorage.getItem("car_No");
+  const vehicleNo = localStorage.getItem("vehicleNo");
 
-  if (carNumber) {
-    lastFourDigits = carNumber.toString().slice(-4);
+  if (vehicleNo) {
+    lastFourDigits = vehicleNo.toString().slice(-4);
   }
 
-  console.log(lastFourDigits, ownerPhoneNum, phone1, phone2);
+  console.log(lastFourDigits, ownerPhoneNum);
 
   let car_status = [
     "The lights of this car are on.",
@@ -116,7 +74,7 @@ export default function Messages({ userId }) {
     try {
       const response = await axios.post(`${baseUrl}/msg/send-message`, {
         message: `Hi ${ownerName}, a user reported 
-Your Vehicle Number #${carNumber} 
+Your Vehicle Number #${vehicleNo} 
 ${getmessage} 
 This message is generated from QR code on your vehicle
 Regards
@@ -125,11 +83,18 @@ VehiConnect`,
       });
 
       if (response.status === 200) {
-        navigate("/message/success");
+        Swal.fire({
+          title: 'Success!',
+          text: 'Message sent Successfully',
+          icon: 'success',
+          showConfirmButton: true,
+          confirmButtonColor: '#28a745',
+          confirmButtonText: 'OK',
+        });
         localStorage.clear();
       }
     } catch (error) {
-      localStorage.removeItem("ownerPhoneNum");
+      // localStorage.removeItem("ownerPhoneNum");
       console.error("Error:", error);
     }
   };

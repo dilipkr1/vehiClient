@@ -10,24 +10,25 @@ import { CartProvider } from './context/cartContext'
 import { OrderProvider } from './context/OrderContext';
 import { SocialMediaProvider } from './context/settingSociaContext'
 import { SettingDataProvider } from './context/settingDetContext'
+import { VendorProvider } from './context/vedorContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render( 
+root.render(
     <AuthProvider>
-        <SettingDataProvider>
-            <SocialMediaProvider>
-                <OrderProvider>
-                    <CartProvider>
-                        <PackageProvider>
-                            <CustomerProvider>
-
-                                <App />
-
-                            </CustomerProvider>
-                        </PackageProvider>
-                    </CartProvider>
-                </OrderProvider>
-            </SocialMediaProvider>
-        </SettingDataProvider>
+        <VendorProvider>
+            <SettingDataProvider>
+                <SocialMediaProvider>
+                    <OrderProvider>
+                        <CartProvider>
+                            <PackageProvider>
+                                <CustomerProvider>
+                                    <App />
+                                </CustomerProvider>
+                            </PackageProvider>
+                        </CartProvider>
+                    </OrderProvider>
+                </SocialMediaProvider>
+            </SettingDataProvider>
+        </VendorProvider>
     </AuthProvider>
 );
 

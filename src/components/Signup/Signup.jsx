@@ -106,7 +106,7 @@ function Signup() {
           data.message || "Registration failed. Please try again later."
         );
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   return (

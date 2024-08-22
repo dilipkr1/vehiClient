@@ -1,87 +1,82 @@
 import { useContext, useEffect, useState } from "react";
 import { OrderContext } from "../../context/OrderContext";
+import { AuthContext } from "../../context/AuthContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Messages from "../Message/Messages";
 import loadingGif from "../../images/loading.gif";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import Button from "@mui/material/Button";
 
 export default function GetUid() {
   const navigate = useNavigate();
   const { uid } = useParams();
-  const [text, setText] = useState(false);
+  const { orderData, qrCodeData } = useContext(OrderContext);
+  const { state } = useContext(AuthContext);
+  const { Orders } = state;
   const [isLoading, setIsLoading] = useState(true);
-  const { orderData } = useContext(OrderContext);
+  const [open, setOpen] = useState(false);
+  const [showActivateButton, setShowActivateButton] = useState(false);
   const [userId, setUserId] = useState(null);
 
-  let baseUrl;
-  if (process.env.NODE_ENV === "development") {
-    baseUrl = process.env.REACT_APP_BACKEND_LOCALAPI;
-  } else {
-    baseUrl = process.env.REACT_APP_BACKEND_LIVEAPI;
-  }
-  console.log(uid.toLocaleLowerCase());
+  const vehiDigit = parseInt(uid.toLowerCase().slice(2));
 
   useEffect(() => {
-    setIsLoading(false);
-  }, [orderData]);
+    localStorage.setItem("uid", uid.toLowerCase());
+    console.log("UID:", uid.toLowerCase());
+  }, [uid]);
 
   useEffect(() => {
-    if (!orderData || orderData.length === 0) return;
-    const getProduct = orderData.cartItems
-      .map((order) => order.cartItems)
-      .flat();
+    if (!qrCodeData || !orderData || !orderData.orders) return;
 
-    const getUid = getProduct.find((product) => {
-      if (product.uid.toLowerCase() === uid.toLocaleLowerCase()) {
-        return true;
-      }
-      return false;
-    });
-
-    if (!getUid) {
-      return (
-        <div className="text-black mt-20 pt-20">
-          <p>UID Does Not Exist</p>
-        </div>
-      );
-    }
-
-    const orderId = getUid
-      ? getUid.orderId
-      : orderData.length > 0
-      ? orderData[0].orderId
-      : null;
-    localStorage.setItem("orderId", orderId);
-
-    const cartItem = orderData.cartItems.find(
-      (item) => item.orderId === orderId
+    const getUid = qrCodeData.find(
+      (qrcode) =>
+        qrcode.uid?.toLowerCase() === uid?.toLowerCase() && qrcode.qrStatus === true && qrcode.qrOrderStatus === true
     );
 
-    if (cartItem) {
-      const userId = cartItem.userId;
-      localStorage.setItem("userId", userId);
-    } else {
-      return;
-    }
-
-    if (getUid && getUid.qrStatus === true) {
-      const getUserId = orderData.cartItems.find(
+    if (getUid) {
+      const getOrder = orderData.orders.find(
         (order) => order.orderId === getUid.orderId
       );
-      const userId = getUserId ? getUserId.userId : null;
-      setUserId(userId);
-    }
 
-    if (getUid.qrStatus === false) {
-      setText(true);
+      if (getOrder) {
+        const vehicleNo = getOrder.vehicleNo;
+        const ownerPhoneNum = getOrder.customerPhone;
+        localStorage.setItem("ownerPhoneNum", getOrder.phone);
+        localStorage.setItem("ownerName", getOrder.fullName);
+        localStorage.setItem("isAllowedPhone", getOrder.isAllowedPhone);
+        localStorage.setItem("isAllowedMsg", getOrder.isAllowedMsg);
+        localStorage.setItem('vehicleNo', getOrder.vehicleNo);
+        console.log("Order found, userId:", getOrder.userId);
+        setUserId(getOrder.userId);
+        setIsLoading(false); // Update loading state after data is retrieved
+      } else {
+        console.error("Order not found with orderId:", getUid.orderId);
+        setIsLoading(false); // Update loading state if order is not found
+      }
+    } else {
+      //need to check for logged in user 
+      console.error("No matching QR code or QR status inactive");
+      setShowActivateButton(true);
+      setOpen(true);
+      setIsLoading(false);
     }
-    setText(true);
-  }, [orderData, uid]);
+  }, [orderData, qrCodeData, uid]);
 
   useEffect(() => {
     if (userId !== null) {
-      navigate("/message");
+      navigate(`/message`);
     }
   }, [userId, navigate]);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  if (vehiDigit > 9999 || vehiDigit < 999) {
+    navigate("/");
+    return null;
+  }
 
   if (isLoading) {
     return (
@@ -91,31 +86,50 @@ export default function GetUid() {
     );
   }
 
-  if (userId === null) {
-    return (
-      <div className="h-48 mt-20 pt-10 mx-auto flex flex-col justify-center items-center text-pgcolor">
-        {text && (
-          <>
-            <p className="font-bold tracking-wide font-sans">
-              Sorry Not Activated!! Or Invalid UID
-            </p>
-            <Link to="/activation">
-              <button className="text-white p-4 font-bold bg-logoClr">
-                Activate Now
-              </button>
-            </Link>
-          </>
-        )}
-      </div>
-    );
-  }
-
   return (
-    <div>
-      <div className="mt-20 pt-20"> </div>
-      <div className="hidden">
-        <Messages userId={userId} />
-      </div>
+    <div style={{ height: "150vh" }}>
+      {showActivateButton && (
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          PaperProps={{
+            style: {
+              padding: "20px",
+              margin: "200px 10px",
+            },
+          }}
+        >
+          <DialogContent>
+            <div
+              style={{
+                textAlign: "center",
+                paddingBottom: "16px",
+                paddingLeft: "10px",
+                paddingRight: "10px",
+              }}
+            >
+              <Link to={`/activation`}>
+                <Button
+                  variant="contained"
+                  style={{
+                    backgroundColor: "orange",
+                    color: "white",
+                    padding: "10px 20px",
+                    marginTop: "10px",
+                  }}
+                >
+                  Activate Now
+                </Button>
+              </Link>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
+
+      {/* Render Messages component with userId as prop */}
+      {userId && <Messages userId={userId} />}
     </div>
   );
 }

@@ -13,6 +13,7 @@ const CartProvider = ({ children }) => {
   }, []);
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartState.cartItems));
+    console.log("cartitems", cartState.cartItems)
   }, [cartState.cartItems]);
 
   return (

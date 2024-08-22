@@ -18,22 +18,26 @@ import Messages from "./components/Message/Messages";
 import CusOrders from "./components/Custorder/CusOrders";
 import CusProfile from "./components/Custopro/CusProfile";
 import GetUid from "./components/GetUid/GetUid";
-import ParkingTag from "./components/Parkingtag/ParkingTag";
+// import ParkingTag from "./components/Parkingtag/ParkingTag";
 import Ourservices from "./components/Services/Ourservices";
-import Homeshop from "./components/Homeshop/Homeshop";
+// import Homeshop from "./components/Homeshop/Homeshop";
 import Reviews from "./components/Reviews/Reviews";
 import About from "./components/About/About";
 import Points from "./components/Points/Points";
 import Trusted from "./components/Trusted/Trusted";
-import Razpay from './components/Razorpay/Razpay'
-import { AuthContext } from "./context/AuthContext";
-import { useContext, useEffect } from "react";
+// import Razpay from './components/Razorpay/Razpay'
+// import { AuthContext } from "./context/AuthContext";
+import { useEffect } from "react";
 import Activate from "./components/Activate/Activate";
 import Terms from "./components/TermsAnd Privacty/Terms";
 import Privacy from "./components/TermsAnd Privacty/Privacy";
 import Refund from "./components/TermsAnd Privacty/Refund";
+import Success from "./components/Response/Success";
+import Failed from "./components/Response/Failed";
+import FAQ from "./components/Faq/Faq";
+import Rvw from "./components/Faq/Rvw";
 
-function App() { 
+function App() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -55,9 +59,11 @@ function App() {
                   <Ourservices />
                   {/* <Homeshop /> */}
                   <Bestsellingpro />
-                  <Reviews />
+                  <Rvw />
+                  {/* <Reviews /> */}
                   <Points />
-                  <Trusted />
+                  <FAQ />
+                  {/* <Trusted /> */}
                 </>
               }
             />
@@ -86,6 +92,10 @@ function App() {
               <Route path="/profile/updated" element={<OrderPlaced title="Successfully Updated" paragraph="see now " />} />
 
             </Route>
+            {/* <Route path="/activation">
+              <Route path="/activation/:uid" element={<GetUid />} />
+
+            </Route> */}
             {/* :
               <Route path="/login" element={<Login />} />
             } */}
@@ -96,7 +106,10 @@ function App() {
             <Route path="refund" element={<Refund />} />
 
 
-            <Route path="pay" element={<Razpay />} />
+            {/* <Route path="pay" element={<InitiatePaymentForm />} /> */}
+            {/* <Route path="su-response" element={<Success />} /> */}
+            <Route path="response" element={<Failed />} />
+
 
             {/* <Route path="news" element={<News />} /> */}
             <Route path="about" element={<About />} />

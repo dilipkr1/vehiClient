@@ -21,8 +21,8 @@ export default function () {
 
   return (
     <div className="">
-      {packageData.map((mypckg) => (
-        <div className="flex justify-center items-center">
+      {packageData.map((mypckg, i) => (
+        <div key={i} className="flex justify-center items-center">
           <Link
             className="lg:flex lg:justify-start justify-between items-center lg:items-start"
             to="/shop"

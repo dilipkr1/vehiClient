@@ -1,191 +1,177 @@
-import React, { useContext, useEffect, useState } from "react";
-import axios from "axios";
-import { AuthContext } from "../../context/AuthContext";
-import { Link, useNavigate } from "react-router-dom";
-import { PackageContext } from "../../context/packageContext";
+import React, { useContext, useState, useEffect } from "react";
+import { Grid, Card, CardContent, Typography, TextField, Button, CircularProgress, IconButton, Collapse } from "@mui/material";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { OrderContext } from "../../context/OrderContext";
-import loadingGif from "../../images/loading.gif";
+import { AuthContext } from "../../context/AuthContext";
+import axios from "axios";
+
 export default function CusOrders() {
-  const { orderData } = useContext(OrderContext);
-  const { packageData } = useContext(PackageContext);
-  const navigate = useNavigate();
-  const [phone1, setPhone1] = useState(null);
-  const [phone2, setPhone2] = useState(null);
   const { state } = useContext(AuthContext);
-  const [orderId, setOrderId] = useState(null);
-  const [success, setSuccess] = useState(false);
-  const [loading, setLoading] = useState(false);
-  let baseUrl;
-  if (process.env.NODE_ENV === "development") {
-    baseUrl = process.env.REACT_APP_BACKEND_LOCALAPI;
-  } else {
-    baseUrl = process.env.REACT_APP_BACKEND_LIVEAPI;
-  }
   const { Orders } = state;
+  const [phones, setPhones] = useState({});
+  const [expandedOrderId, setExpandedOrderId] = useState(null);
+  const [success, setSuccess] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  const baseUrl = process.env.NODE_ENV === "development"
+    ? process.env.REACT_APP_BACKEND_LOCALAPI
+    : process.env.REACT_APP_BACKEND_LIVEAPI;
 
   useEffect(() => {
-    axios
-      .get(baseUrl)
-      .then((response) => {
-        setLoading(false);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        setLoading(false);
-        console.error("Error:", error);
-      });
-  }, []);
+    // Initialize phones state with existing phone numbers from Orders
+    const initialPhones = Orders.reduce((acc, order) => {
+      acc[order.orderId] = {
+        phone1: order.phone1 || "",
+        phone2: order.phone2 || "",
+      };
+      return acc;
+    }, {});
+    setPhones(initialPhones);
+  }, [Orders]);
 
-  const handleClick = (x) => {
-    setOrderId(x);
+  const handleInputChange = (orderId, phoneKey, value) => {
+    setPhones((prev) => ({
+      ...prev,
+      [orderId]: {
+        ...prev[orderId],
+        [phoneKey]: value,
+      },
+    }));
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <img src={loadingGif} alt="Loading" />
-      </div>
-    );
-  }
-
-  const handleSubmit = async () => {
+  const handleSubmit = async (orderId) => {
+    setLoading(true);
     try {
-      const response = await axios.put(`${baseUrl}/contacts/update-number`, {
-        orderId: orderId,
-        phone1: phone1,
-        phone2: phone2,
+      const { phone1, phone2 } = phones[orderId] || {};
+      const response = await axios.put(`${baseUrl}/update-number`, {
+        orderId,
+        phone1,
+        phone2,
         isAllowedPhone: true,
         isAllowedMsg: false,
       });
+
       if (response.status === 200) {
-        setSuccess(true);
+        setSuccess((prev) => ({
+          ...prev,
+          [orderId]: true,
+        }));
         setTimeout(() => {
-          setSuccess(false);
+          setSuccess((prev) => ({
+            ...prev,
+            [orderId]: false,
+          }));
         }, 3000);
-        console.log("Updated successfully");
+
+        // Update the order data after successful submission
+        // Update the `Orders` state with new data if needed
       } else {
         console.error("Update failed:", response.data.message);
       }
     } catch (error) {
       console.error("Error:", error);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const handleExpandClick = (orderId) => {
+    setExpandedOrderId(expandedOrderId === orderId ? null : orderId);
   };
 
   function formatDate(dateString) {
     const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = ("0" + (date.getMonth() + 1)).slice(-2);
-    const day = ("0" + date.getDate()).slice(-2);
-    const hours = ("0" + date.getHours()).slice(-2);
-    const minutes = ("0" + date.getMinutes()).slice(-2);
-    return `${year}-${month}-${day} ${hours}:${minutes}`;
+    return date.toLocaleString(); // Format to a readable date and time
   }
 
   if (!Orders || Orders.length === 0) {
     return (
       <div className="flex flex-col m-5 p-3 mt-20 pt-20 justify-center items-center">
         <p className="text-logoClr font-extrabold text-2xl font-sans rounded-sm">
-          You Don't have any order ?
+          You Don't have any orders
         </p>
-        <img
-          className="w-30 "
-          loading="lazy"
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXgY2__KniuYieXzn6koGTAV9WsIxplMSHTfkMwIf1sde7bnxYId7NPpfcecK5iknrj1E&usqp=CAU"
-        />
       </div>
     );
   }
 
   return (
-    <div
-      style={{ height: "auto", overflow: "auto" }}
-      className="flex flex-wrap justify-center"
-    >
-      {Orders.map((order, index) => (
-        <div
-          key={order._id}
-          className="bg-white rounded-lg overflow-hidden shadow-lg m-4 border border-gray-200"
-          style={{ width: "400px" }}
-        >
-          <div className="p-4">
-            {order.cartItems.map((item) => (
-              <div key={item._id} className="mb-1">
-                {packageData.map((product) => {
-                  if (product._id === item.product_id) {
-                    return (
-                      <div
-                        key={product._id}
-                        className="flex flex-col items-start"
-                      >
-                        <img
-                          loading="lazy"
-                          style={{ borderRadius: "5%", width: "100%" }}
-                          src={product.packageImg}
-                          alt={product.packageName}
-                          className="h-40"
-                        />
-                        <p className="m-0 p-0">{product.packageName}</p>
-                      </div>
-                    );
-                  }
-                  return null;
-                })}
-              </div>
-            ))}
-            <div className="flex flex-col">
-              <div className="flex justify-start items-start">
-                {" "}
-                <h1 className="font-bold">
-                  Vehicle Number: {order.cartItems[0].car_No}
-                </h1>
-                {/* <p className="text-logoClr font-bold"></p> */}
-              </div>
-              <div className="flex justify-start gap-2 items-center">
-                <span className="font-bold">Date:</span>{" "}
-                {formatDate(order.createdAt)}
-                <h1 className="font-bold">Status:</h1>
-                <p>{order.status}</p>
-              </div>
-            </div>
-            <div className="mt-1">
-              <h1 className="font-bold">Add Emergency Contact:</h1>
-              <input
-                required
-                className="w-full px-2 py-1 bg-gray-100 rounded border mt-2"
-                type="tel"
-                id="phone1"
-                name="phone1"
-                onClick={() => handleClick(Orders[index].orderId)}
-                onChange={(e) => setPhone1(e.target.value)}
-                pattern="[0-9]{10}"
-                maxLength="10"
-                placeholder="Enter Family Contact Number 1"
-              />
-              <input
-                required
-                className="w-full px-2 py-1 bg-gray-100 border mt-1 rounded "
-                type="tel"
-                id="phone2"
-                name="phone2"
-                onClick={() => handleClick(Orders[index].orderId)}
-                onChange={(e) => setPhone2(e.target.value)}
-                pattern="[0-9]{10}"
-                maxLength="10"
-                placeholder="Enter Family Contact Number 2"
-              />
-              {success && (
-                <p className="text-green-500">Successfully Updated</p>
-              )}
-              <button
-                onClick={handleSubmit}
-                className="bg-black text-white p-2 px-3 mt-2 rounded"
+    <Grid container spacing={2} className="p-4">
+      {Orders.map((order) => (
+        <Grid item xs={12} md={6} lg={4} key={order._id}>
+          <Card className="shadow-lg border rounded-lg overflow-hidden" style={{ maxHeight: "auto" }}>
+            <CardContent style={{ gap: "10px", display: "flex", flexDirection: "column", padding: "8px" }}>
+              <Typography
+                variant="body2"
+                style={{
+                  fontSize: "12px",
+                  textTransform: "uppercase",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "5px",
+                }}
               >
-                Update
-              </button>
-            </div>
-          </div>
-        </div>
+                <span>Order ID: {order.orderId}</span>
+                <span className="font-bold">Vehicle Number: {order.vehicleNo}</span>
+                <span>Date: {formatDate(order.createdAt)}</span>
+                <span>Order Status: {order.orderStatus}</span>
+              </Typography>
+
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <Typography variant="body2" style={{ fontSize: "10px" }}>
+                  Add Family Contact
+                </Typography>
+                <IconButton onClick={() => handleExpandClick(order.orderId)}>
+                  {expandedOrderId === order.orderId ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                </IconButton>
+              </div>
+
+              <Collapse in={expandedOrderId === order.orderId}>
+                <TextField
+                  fullWidth
+                  label="Family Contact Number 1"
+                  variant="outlined"
+                  margin="normal"
+                  value={phones[order.orderId]?.phone1 || ""}
+                  onChange={(e) => handleInputChange(order.orderId, "phone1", e.target.value)}
+                  inputProps={{ maxLength: 10 }}
+                  type="tel"
+                  style={{ fontSize: "10px" }}
+                />
+                <TextField
+                  fullWidth
+                  label="Family Contact Number 2"
+                  variant="outlined"
+                  margin="normal"
+                  value={phones[order.orderId]?.phone2 || ""}
+                  onChange={(e) => handleInputChange(order.orderId, "phone2", e.target.value)}
+                  inputProps={{ maxLength: 10 }}
+                  type="tel"
+                  style={{ fontSize: "10px" }}
+                />
+                {success[order.orderId] && (
+                  <Typography variant="body2" color="green" style={{ fontSize: "10px" }}>
+                    Successfully Updated
+                  </Typography>
+                )}
+                <Button
+                  variant="contained"
+                  className="mt-4"
+                  onClick={() => handleSubmit(order.orderId)}
+                  disabled={loading}
+                  style={{ fontSize: "12px", padding: "10px", backgroundColor: '#F68418' }}
+                >
+                  {loading ? (
+                    <CircularProgress size={16} color="inherit" />
+                  ) : (
+                    "Update"
+                  )}
+                </Button>
+              </Collapse>
+            </CardContent>
+          </Card>
+        </Grid>
       ))}
-    </div>
+    </Grid>
   );
 }

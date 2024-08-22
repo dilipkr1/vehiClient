@@ -105,7 +105,7 @@ export default function Workdetails() {
           </p>
         </div>
       </div>
-      <div class="video-container">
+      {/* <div class="video-container">
         <iframe
           src="https://www.youtube.com/embed/MQvwi2gUsuc?si=u9R-CL_2439_s3Qp"
           title="YouTube video player"
@@ -114,7 +114,7 @@ export default function Workdetails() {
           referrerpolicy="strict-origin-when-cross-origin"
           allowfullscreen
         ></iframe>
-      </div>
+      </div> */}
     </div>
   );
 }

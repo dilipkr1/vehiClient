@@ -39,25 +39,25 @@ export default function () {
               </a>
             </li>
             <li>
-              <a href={socialMedia?.facebook}>
+              <a href={socialMedia?.instagram}>
                 <i className="fa-brands fa-instagram bg-white rounded px-2 py-2"></i>
               </a>
             </li>
             <li>
-              <a href={socialMedia?.facebook}>
+              <a href={socialMedia?.twitter}>
                 <i className="fa-brands fa-twitter bg-white rounded px-2 py-2"></i>
               </a>
             </li>
-            <li>
-              <a href={socialMedia?.facebook}>
+            {/* <li>
+              <a href={socialMedia?.youtube}>
                 <i className="fa-brands fa-youtube bg-white rounded px-2 py-2"></i>
               </a>
-            </li>
-            <li>
-              <a href={socialMedia?.facebook}>
+            </li> */}
+            {/* <li>
+              <a href={socialMedia?.linkedin}>
                 <i className="fa-brands fa-linkedin bg-white rounded px-2 py-2"></i>
               </a>
-            </li>
+            </li> */}
           </ul>
           {/* </div> */}
         </div>
@@ -103,8 +103,8 @@ export default function () {
       </div>
       {/* </div> */}
       <hr className="mt-4" />
-      <div className="flex justify-between lg:px-20 MobView mobPadd">
-        <div className="copyRight flex gap-4 mt-2 lg:pl-32">
+      <div className="flex justify-center lg:px-20 MobView mobPadd">
+        {/* <div className="copyRight flex gap-4 mt-2 lg:pl-32">
           <button className="flex bg-white hover:bg-pricingcard text-main-700 font-semibold   py-2 lg:px-4 px-3 border border-blue-50 hover:border-transparent rounded">
             <a href={socialMedia?.android}>
               <svg
@@ -145,7 +145,7 @@ export default function () {
             </a>{" "}
             Download
           </button>
-        </div>
+        </div> */}
         <div className="mt-2 p-0 text-xs text-pgcolor">
           <p className="text-center mx-auto">
             Copyright © 2024 {getSettingData?.businessName}. All rights

@@ -1,9 +1,16 @@
-.productSize {
-  max-width: 300px;
-  max-height: 290px;
-  border-radius: 8px;
+ 
+   .deskImg {
+    max-width: 100px;  
+    max-height:100px; 
+  }
+ 
+@media (min-width: 1024px) and (max-width: 1440px) {
+  .deskImg {
+    max-width: 100px;  
+    max-height:50px; 
+  }
 }
-@media only screen and (max-width: 767px) {
+@media only screen and (max-width: 500px) {
   .cartMob {
     display: block;
   }
@@ -12,8 +19,8 @@
     padding-top: 20px;
   }
   .productSizeMOb {
-    max-width: 320px;
-    max-height: 320px;
+    max-width: 200px;
+    max-height: 200px;
     border-radius: 8px;
   }
 }

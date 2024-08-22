@@ -12,7 +12,7 @@ function vehFeatures() {
         <div class="flex justify-start items-center">
           <div className="heading gap-3 mt-4">
             <h3 className="text-pgcolor textwidthVf lg:text-3xl text-2xl">
-              CAR AND BIKE PARKING TAG
+              VEHICLE PARKING TAG
             </h3>
             <div className="title my-2">
               <h1 className="text-pgcolor textwidthVf textwidthLeft lg:text-4xl text-3xl font-bold tracking-wide ">

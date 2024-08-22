@@ -16,9 +16,10 @@ export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(Reducer, initialState);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token"); 
     if (token) {
       setIsAuthenticated(true);
+      dispatch({ type: 'LOGIN_SUCCESS', payload: { token } }); 
     }
   }, []);
 
@@ -30,23 +31,26 @@ export const AuthProvider = ({ children }) => {
       baseUrl = process.env.REACT_APP_BACKEND_LIVEAPI;
     }
     const fetchData = async () => {
+
       try {
         dispatch({ type: 'SET_LOADING', payload: true });
-        const bearerToken = localStorage.getItem("token");
-        const headers = {
-          Authorization: `Bearer ${bearerToken}`,
-        };
-        const userDataResponse = await axios.get(
-          `${baseUrl}/auth/users`,
-          { headers: headers }
-        );
-        const userOrdersResponse = await axios.get(
-          `${baseUrl}/orders/user-orders`,
-          { headers: headers }
-        );
+        const token = localStorage.getItem("token");
 
-        dispatch({ type: "LOGIN_SUCCESS", payload: bearerToken });
-        dispatch({ type: "SET_USER", payload: userDataResponse.data.customer });
+        const header = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        };
+
+        const userDataResponse = await axios.get(`${baseUrl}/auth/users`, header);
+        // console.log("users", userDataResponse.data);
+
+        const userOrdersResponse = await axios.get(`${baseUrl}/user-orders`, header);
+
+        // console.log("orders", userOrdersResponse.data);
+
+        dispatch({ type: "LOGIN_SUCCESS", payload: token });
+        dispatch({ type: "SET_USER", payload: userDataResponse.data });
         dispatch({ type: "SET_ORDERS", payload: userOrdersResponse.data });
       } catch (error) {
         dispatch({ type: "SET_LOADING", payload: false });
